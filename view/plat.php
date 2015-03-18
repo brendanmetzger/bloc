@@ -17,13 +17,20 @@ class Plat
   public function __construct($view, $data)
   {
     foreach ($view->parser->queryCommentNodes('iterate') as $key => $node) {
-      $matched = $this->map($view, $node->nextSibling);
+      $context = $node->nextSibling;
+      $matched = $this->map($view, $context);
       
-      $nodelist = substr($matched->item(0)->nodeValue, 2,-1);
-        
-      foreach ($data->{$key} as $datum) {
-        \bloc\console::dump($datum);
+      
+      foreach ($matched as $sub_node) {
+        $slug = substr($sub_node->nodeValue, 2,-1);
+        $template = $sub_node;
+        foreach ($data->{$key} as $datum) {
+          $template->nodeValue = $datum[$slug];
+          $node->parentNode->insertBefore($context->cloneNode(true), $node);
+        }
       }
+      $node->parentNode->removeChild($node);
+      $context->parentNode->removeChild($context);
     }
   }
   
