@@ -38,7 +38,7 @@ class Application
          COMMAND = 2,
          SERVICE = 3;
 
-  private $_bootstrap_callback;
+  private $_callbacks = [];
   
   public function __construct()
   {
@@ -47,16 +47,16 @@ class Application
     spl_autoload_register(array($this,'failtoload'));
   }
 
-  public function bootstrap($callback)
+  public function queue($env, $callback)
   {
-    $this->_bootstrap_callback = $callback;
+    $this->_callbacks[$env] = $callback;
   }
 
-  public function run()
+  public function run($env)
   {
     try {
       
-      call_user_func($this->_bootstrap_callback, $this);
+      call_user_func($this->_callbacks[$env], $this);
 
       
     } catch (\LogicException $e) {
