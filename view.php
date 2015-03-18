@@ -14,34 +14,17 @@ class View
 	
   function __construct($template = '')
   {
-    $this->_dom = new \DomDocument('1.0', 'UTF-8');
-
-		$this->_dom->encoding           = 'UTF-8';
-    $this->_dom->preserveWhiteSpace = false;
-    $this->_dom->formatOutput        = true;
-
-    $this->_dom->load(PATH.$template, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
-   
-    
+    $this->_dom = $this->makeNewDoc($template);
      
     // For searching the document. Used in `$view->render` as well
     $this->xpath = new \DomXpath($this->_dom);
   }
+  
 	
 	public function setPage($where, $page)
 	{
-    // $fragment = $this->_dom->createDocumentFragment();
-    // $fragment->appendXML(trim(file_get_contents(PATH.$page)));
-    // $fragment->normalize();
-
-    $this->_page = new \DomDocument('1.0', 'UTF-8');
-
-    $this->_page->encoding          = 'UTF-8';
-    $this->_page->preserveWhiteSpace = false;
-    $this->_page->formatOutput       = false;
-
-    $this->_page->load(PATH.$page);
-    $element = $this->_dom->importNode($this->_page->documentElement, true);
+    $page = $this->makeNewDoc($page);
+    $element = $this->_dom->importNode($page->documentElement, true);
     $swap = $this->xpath->query($where)->item(0);
 		$swap->parentNode->replaceChild($element, $swap);
 		
@@ -99,4 +82,17 @@ class View
     
     return $this->_dom->saveXML();
 	}
+  
+  private function makeNewDoc($file)
+  {
+    $document = new \DomDocument('1.0', 'UTF-8');
+
+    $document->encoding           = 'UTF-8';
+    $document->preserveWhiteSpace = false;
+    $document->formatOutput       = true;
+
+    $document->load(PATH.$file, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
+
+    return $document;
+  }
 }
