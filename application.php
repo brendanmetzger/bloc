@@ -9,9 +9,6 @@ define('NS', '\\');
 # shorthand for directory separator ( / )
 define('DS',DIRECTORY_SEPARATOR);
 
-# shorthand for path separator ( : )
-define('PS', PATH_SEPARATOR);
-
 # the ONLY path constant, thus, aptly named.
 define('PATH', realpath('../') . DS);
 
@@ -29,22 +26,18 @@ define('PATH', realpath('../') . DS);
  * Application Whizbang
  *
  * @category bloc
- * @copyright Copyright (c) 2008, Brendan Metzger <brendan.metzger@gmail.com>
+ * @copyright Copyright (c) 2008-present, Brendan Metzger <brendan.metzger@gmail.com>
  */
  
 class Application
 {  
-  const  WEBSITE = 1,
-         COMMAND = 2,
-         SERVICE = 3;
-
   private $_callbacks = [];
   
   public function __construct()
   {
-    set_include_path(get_include_path() . PS . PATH);
-    spl_autoload_register(array($this,'autoload'));
-    spl_autoload_register(array($this,'failtoload'));
+    set_include_path(get_include_path() . PATH_SEPARATOR . PATH);
+    spl_autoload_register([$this, 'autoload']);
+    spl_autoload_register([$this, 'failtoload']);
   }
 
   public function queue($env, $callback)
@@ -55,31 +48,13 @@ class Application
   public function run($env)
   {
     try {
-      
       call_user_func($this->_callbacks[$env], $this);
-
-      
     } catch (\LogicException $e) {
-
-      console::error($e->getMessage());
-
+      console::error($e, 1);
     } catch (\RunTimeException $e) {
-
-      console::error($e->getMessage());
-      console::error($e->getLine());
-      console::error($e->getFile());
-      console::error($e->getTrace());
-
+      console::error($e, 2);
     } catch (\Exception $e) {
-
-      console::error($e->getMessage());
-      console::error($e->getLine());
-      console::error($e->getFile());
-      // called in:
-      $trace = $e->getTrace();
-      $called = $trace[0];
-      console::error("problem in {$called['function']} - line {$called['line']} in {$called['file']}");
-
+      console::error($e, 3);
     }
   }
 
@@ -91,9 +66,8 @@ class Application
   public function failtoload($class)
   {
     if (! file_exists(PATH . str_replace(NS, DS, $class) . '.php')) {
-      throw new \LogicException("What the hell is this _{$class}_ file you are referring to?", 1);  
+      throw new \LogicException("What the hell is this '{$class}' file you are referring to?", 1);  
     }
     
   }
 }
-
