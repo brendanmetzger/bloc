@@ -2,18 +2,18 @@
 namespace bloc;
 
 /**
- * Router
+   A router simply loads classes from a particular directory according to the tried and true controller.action method. The directory to look in is supplied via the `namespace` argument. The Request object contains information about the request.
  */
 
 class Router
 {
-  const CTRL = 'controllers';
-
   public $request;
-
-  function __construct($request)
+  private $namespace;
+  
+  function __construct($namespace, $request)
   {
-    $this->request = $request;
+    $this->namespace = NS . $namespace . NS;
+    $this->request   = $request;
   }
 
   /**
@@ -23,7 +23,7 @@ class Router
    */
   private function GETcontroller($control)
   {
-    return new \ReflectionClass( NS . self::CTRL . NS . $control);
+    return new \ReflectionClass( $this->namespace . $control);
   }
 
   /**
@@ -43,22 +43,20 @@ class Router
 
   public function delegate($controller, $action)
   {
-    $control = $this->GETcontroller($this->request->controller ?: $controller);
-    $action  = $this->GETAction($control, $this->request->action ?: $action);
+    $control  = $this->GETcontroller($this->request->controller ?: $controller);
+    $instance = $control->newInstance();
 
-    if ( $action->isPublic() ) {
-      
-      $instance = $control->newInstance();
+    try {
+      $action  = $this->GETAction($control, $this->request->action ?: $action);
+      // here would be where we dump in some session variable relating to login
+      if ( $action->isProtected() ) {
+        $action->setAccessible(false);        
+      }
       
       $action->invokeArgs($instance, $this->request->params);
-
-    } else if ( $action->isProtected() ) {
       
-      // instantiate this as by switching visibility of action method from
-      // protected to public.
-      
-    } else {
-      throw new \BadMethodCallException('The area you are attempting to access is restricted. This has been logged to the system.');
+    } catch (\ReflectionException $e) {
+      $this->GETAction($control, 'login')->invoke($instance);
     }
   }
 }
