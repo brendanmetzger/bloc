@@ -5,9 +5,9 @@ namespace bloc\view;
 /**
  * Plat
 
-   This workhorse is an interesting specimen. Feed it a node in the constructor. Should you 
+   This workhorse is an interesting specimen. Feed it a view in the constructor. Should you 
   be interested in mapping data to the node (and you should), pass in a chunk of data that has 
-  keys (object or array) to the `plat->addData()` method.
+  keys (object or array) as well.
 
  */
 
@@ -55,7 +55,6 @@ class Plat
     # and ends with the close placeholder
     $exp .= "substring(., string-length(.), 1) = ']']";
     
-    \bloc\console::dump($exp);
     return $view->xpath->query($exp, $context);
   }
   
