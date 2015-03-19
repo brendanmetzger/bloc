@@ -13,8 +13,6 @@ define('DS',DIRECTORY_SEPARATOR);
 define('PATH', realpath('../') . DS);
 
 
-
-
 /**
  * bloc
  *

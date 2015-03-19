@@ -2,7 +2,9 @@
 namespace bloc;
 
 /**
-   A router simply loads classes from a particular directory according to the tried and true controller.action method. The directory to look in is supplied via the `namespace` argument. The Request object contains information about the request.
+ * A router simply loads classes from a particular directory according to the 
+ * tried and true controller.action method. The directory to look in is supplied via 
+ * the `namespace` argument. The Request .
  */
 
 class Router
@@ -17,7 +19,6 @@ class Router
   }
 
   /**
-   *Define controller
    * @param string $controller
    * @return ReflectionClass
    */
@@ -27,7 +28,6 @@ class Router
   }
 
   /**
-   * Define Action
    * @param ReflectionClass $controller
    * @param string $action 
    * @return ReflectionMethod
