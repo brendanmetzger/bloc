@@ -16,9 +16,11 @@ class Plat
   
   public function __construct($view, $data)
   {
+    
+    // cycle through iterators and see to their needs first
     foreach ($view->parser->queryCommentNodes('iterate') as $key => $node) {
-      $context = $node->nextSibling;
-      $matched = $this->map($view, $context);
+      $context = $node->parentNode->removeChild($node->nextSibling);
+      $matched = $this->getSlugs($view, $context);
       
       
       foreach ($matched as $sub_node) {
@@ -30,11 +32,24 @@ class Plat
         }
       }
       $node->parentNode->removeChild($node);
-      $context->parentNode->removeChild($context);
+      
+    }
+    
+    // find document wide placeholders
+    $matched = $this->getSlugs($view, $view->dom->documentElement);
+    foreach ($matched as $node) {
+      $slug = substr($node->nodeValue, 1,-1);
+      // 2 is attribute, 1 is element
+      $node->nodeValue = preg_replace_callback('/\@([a-z\_\:0-9]+)\b/i', function($matches) use($data){
+        return $data->{$matches[1]};
+      }, $slug);
+      
     }
   }
   
-  public function map($view, $context)
+  
+  
+  public function getSlugs($view, $context)
   {
     # start with the current element and look for nodes
     $exp = "./descendant-or-self::*[";
