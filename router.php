@@ -46,8 +46,8 @@ class Router
 
   public function delegate($controller, $action)
   {
-    $control = $this->GETcontroller($controller);
-    $action  = $this->GETAction($control, $action);
+    $control = $this->GETcontroller($this->request->controller ?: $controller);
+    $action  = $this->GETAction($control, $this->request->action ?: $action);
 
     if ( $action->isPublic() ) {
       

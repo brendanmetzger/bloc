@@ -23,7 +23,7 @@ class Console
     }
     
     if ($level > 2) {
-      $trace = $e->getTrace();
+      $trace = $exception->getTrace();
       $called = $trace[0];
       self::dump("problem in {$called['function']} - line {$called['line']} in {$called['file']}");
     }
