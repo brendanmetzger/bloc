@@ -4,7 +4,7 @@ Brendan's Load of Code
 
 ## Basic usage
 
-Create a file with this in it, index.php would be a good choice, obviously a web accessible spot.
+Create a file with something like this in it, index.php would be a good choice, obviously a web accessible spot.
 
     namespace bloc;
 
@@ -15,10 +15,10 @@ Create a file with this in it, index.php would be a good choice, obviously a web
     #2. Create an instance of the application
     $app = new application;
 
-    #3. All code is executed in this callback. You can have a queue of things go off according to certain situations. Here http-request is tho only specified and the only needed at the moment. 
+    #3. All code is executed in a callback. You can have a queue of things go off according to certain situations. Here http-request is the only callback specified. 
     $app->queue('http-request', function($app) {
       // routes and requests
-      $router  = new router(new request($_REQUEST));
+      $router  = new router('controllers', new request($_REQUEST));
       // default controller and action as arguments, in case nothin doin in the request
       $router->delegate('some_controller', 'some_action');
     });
