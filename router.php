@@ -17,10 +17,9 @@ class Router
   }
 
   /**
-   * Create Controller Object
-   *
-   * @param string $controller controller name called by user
-   * @return ReflectionClass reflection instance of the controller object
+   *Define controller
+   * @param string $controller
+   * @return ReflectionClass
    */
   private function GETcontroller($control)
   {
@@ -28,12 +27,10 @@ class Router
   }
 
   /**
-   * Create Action Object
-   *
-   * @param ReflectionClass $controller controller class
-   * @param string $action action method called by user
-   * @return ReflectionMethod relection instance of the action method
-   * @see _createController
+   * Define Action
+   * @param ReflectionClass $controller
+   * @param string $action 
+   * @return ReflectionMethod
    */
   private function GETaction(\ReflectionClass $control, $action)
   {    
@@ -64,6 +61,4 @@ class Router
       throw new \BadMethodCallException('The area you are attempting to access is restricted. This has been logged to the system.');
     }
   }
-
-
 }
