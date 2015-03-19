@@ -76,10 +76,11 @@ class View
     $script = $this->dom->createElement('script');
     $script->setAttribute('type', 'text/javascript');
     foreach ($this->xpath->query('/html/body//script') as $javascript) {
-      $script->appendChild($this->dom->createTextNode($javascript->nodeValue));
-      $javascript->parentNode->removeChild($javascript);
+      // $script->appendChild($this->dom->createTextNode($javascript->nodeValue));
+      $root->lastChild->appendChild($javascript);
+      // $javascript->parentNode->removeChild($javascript);
     }
-    $root->lastChild->appendChild($script);
+    // $root->lastChild->appendChild($script);
 		
 		$attrs = [
 			'xmlns'      => 'http://www.w3.org/1999/xhtml',
