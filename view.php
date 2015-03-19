@@ -10,6 +10,8 @@ class View
   public $xpath;
   public $parser;
 	
+  public static $webroot = '';
+  
   /**
    * Document Creator
    *
@@ -23,7 +25,7 @@ class View
     $document->encoding           = 'UTF-8';
     $document->preserveWhiteSpace = false;
     $document->formatOutput       = true;
-    $document->load(PATH.$file, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
+    $document->load(PATH.view::$webroot.$file, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
 
     return $document;
   }
