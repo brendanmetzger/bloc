@@ -9,6 +9,7 @@ class Request
   private $params = [];
   public function __construct($data)
   {
+    \bloc\console::dump($data);
     $this->params = $data;
   }
   
