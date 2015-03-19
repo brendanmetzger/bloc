@@ -2,9 +2,8 @@
 namespace bloc;
 
 /**
- * A view represents the object that will mash any XML based data together.
+  A view represents the object that will mash any XML based data together.
  */
-
 class View
 {
   public $dom;
@@ -55,9 +54,7 @@ class View
 	}
 	
 	public function render()
-	{
-		$root = $this->dom->documentElement;
-    
+	{    
 		$ns = ['math' => 'http://www.w3.org/1998/Math/MathML',
 			     'svg'  => 'http://www.w3.org/2000/svg'
 			    ];
@@ -69,30 +66,24 @@ class View
     
     // Add links, meta, and style tags to the very top
     foreach ($this->xpath->query('/html/body//style|/html/body//meta|/html/body//link') as $head_node) {
-      $root->firstChild->appendChild($head_node);
+      $this->dom->documentElement->firstChild->appendChild($head_node);
     }
     
     // Put all Javascripts right at the bottom.
-    $script = $this->dom->createElement('script');
-    $script->setAttribute('type', 'text/javascript');
     foreach ($this->xpath->query('/html/body//script') as $javascript) {
-      // $script->appendChild($this->dom->createTextNode($javascript->nodeValue));
-      $root->lastChild->appendChild($javascript);
-      // $javascript->parentNode->removeChild($javascript);
+      $this->dom->documentElement->lastChild->appendChild($javascript);
     }
-    // $root->lastChild->appendChild($script);
 		
 		$attrs = [
 			'xmlns'      => 'http://www.w3.org/1999/xhtml',
 			'xmlns:foaf' => 'http://xmlns.com/foaf/0.1/',
 			'xmlns:dc'   => 'http://purl.org/dc/elements/1.1/',
-			'xmlns:svg'  => 'http://www.w3.org/2000/svg',
 			'version'    => 'XHTML+RDFa 1.0',
 			'xml:lang'   => 'en',
     ];
 		
 		foreach ($attrs as $key => $value) {
-			$root->setAttribute($key, $value);
+			$this->dom->documentElement->setAttribute($key, $value);
 		}
     
     return $this->dom->saveXML();

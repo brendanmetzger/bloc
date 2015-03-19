@@ -53,7 +53,7 @@ class Router
       
       $instance = $control->newInstance();
       
-      $action->invoke($instance, $this->request->params);
+      $action->invokeArgs($instance, $this->request->params);
 
     } else if ( $action->isProtected() ) {
       
