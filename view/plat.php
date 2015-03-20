@@ -21,15 +21,28 @@ class Plat
     foreach ($view->parser->queryCommentNodes('iterate') as $key => $node) {
       $context = $node->parentNode->removeChild($node->nextSibling);
       $matched = $this->getSlugs($view, $context);
-      
-      if (property_exists($data, $key)) { 
-        foreach ($matched as $sub_node) {
-          $slug = substr($sub_node->nodeValue, 2,-1);
-          $template = $sub_node;
-          foreach ($data->{$key} as $datum) {
-            $template->nodeValue = $datum[$slug];
-            $node->parentNode->insertBefore($context->cloneNode(true), $node);
+
+      if (property_exists($data, $key)) {
+
+        foreach ($data->{$key} as $datum) {
+          ksort($datum);
+          
+          foreach ($matched as $template) {
+            /*
+              TODO seriously consider adding this to getSlugs method. would need to execute another loop.. would be nice to have a benchmark.
+            */
+            if (!property_exists($template, 'slug')) {
+              preg_match_all('/\@([a-z\_\:0-9]+)\b/i', substr($template->nodeValue, 1, -1), $matches);
+              $template->matches = array_combine($matches[1], $matches[0]);
+              ksort($template->matches);
+              $template->slug = substr($template->nodeValue, 1,-1);
+            }
+            
+            $template->nodeValue = str_replace($template->matches, array_intersect_key($datum, $template->matches), $template->slug);
+          
           }
+          
+          $node->parentNode->insertBefore($context->cloneNode(true), $node);
         }
       }
       

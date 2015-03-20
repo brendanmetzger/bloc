@@ -8,7 +8,7 @@ namespace bloc;
 class Console
 {
   
-  static public function dump($data) {
+  static public function dump($data = null) {
     echo "<pre>";
     var_dump($data);
     echo "</pre>";
