@@ -22,15 +22,18 @@ class Plat
       $context = $node->parentNode->removeChild($node->nextSibling);
       $matched = $this->getSlugs($view, $context);
       
-      
-      foreach ($matched as $sub_node) {
-        $slug = substr($sub_node->nodeValue, 2,-1);
-        $template = $sub_node;
-        foreach ($data->{$key} as $datum) {
-          $template->nodeValue = $datum[$slug];
-          $node->parentNode->insertBefore($context->cloneNode(true), $node);
+      if (property_exists($data, $key)) { 
+        foreach ($matched as $sub_node) {
+          $slug = substr($sub_node->nodeValue, 2,-1);
+          $template = $sub_node;
+          foreach ($data->{$key} as $datum) {
+            $template->nodeValue = $datum[$slug];
+            $node->parentNode->insertBefore($context->cloneNode(true), $node);
+          }
         }
       }
+      
+      
       $node->parentNode->removeChild($node);
       
     }

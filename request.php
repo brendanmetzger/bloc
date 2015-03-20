@@ -11,8 +11,8 @@ class Request
   {
     $data['params'] = explode('/', ($data['params']));
     $this->params = $data;
-
   }
+  
   
   public function __get($key)
   {

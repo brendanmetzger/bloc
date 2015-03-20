@@ -50,13 +50,16 @@ class Router
       $action  = $this->GETAction($control, $this->request->action ?: $action);
       // here would be where we dump in some session variable relating to login
       if ( $action->isProtected() ) {
-        $action->setAccessible(false);        
+        if (session_id() === '') {
+          session_start();
+        }
+        $action->setAccessible(array_key_exists('user', $_SESSION));        
       }
       
       $action->invokeArgs($instance, $this->request->params);
       
     } catch (\ReflectionException $e) {
-      $this->GETAction($control, 'login')->invoke($instance);
+      $this->GETAction($control, 'login')->invoke($instance, $_SERVER['REDIRECT_URL'], $_POST);
     }
   }
 }
