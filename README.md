@@ -1,6 +1,7 @@
 # bloc
 
-Brendan's Load of Code
+Brendan's Locus of Code
+
 
 ## Basic usage
 
@@ -26,6 +27,12 @@ Create a file with something like this in it, index.php would be a good choice, 
 
     #4. Run the app. Nothing happens w/o this. Can call different stuff from the queue.
     $app->run('http-request');
+    
+## Some conventions.
+
+Part of my motivation in creating a framework is to (1) Avoid having a single dependency and (2) to create an entire system that you can feel like you comprehend. Part of getting there involves writing code that need not be explained via documentation, so I am avoiding docblocks and anything else that should be explainable by syntax and a few moments of careful study. To aid in parsing code, here are some of my idiosyncratic conventions:
+
+- a method starting with *rig* as in `rigThisThing` will always be returning a new instance of some object. Unlike a factory method, it will always provide you with the exact same object type back, but perhaps configured differently due to method arguments or environmental variables. **If you see a `$variable = $obj->rigMe();` the $variable will be an object!** 
  
 
 ## Rewrites for cleaner urls.

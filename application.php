@@ -2,7 +2,6 @@
 
 namespace bloc;
 
-
 # shorthand for namespace separator ( \ )
 define('NS', '\\');
 
