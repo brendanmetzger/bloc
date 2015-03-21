@@ -1,6 +1,27 @@
 <?php
 namespace bloc;
 
+
+
+
+
+/*
+  TODO there should be no `setPage` method. a new view shourd just be passed to another view. Consolodate plat into parser!
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**
   A view represents the object that will mash any XML based data together.
  */
@@ -55,9 +76,11 @@ class View
     }
 	}
 	
-	public function render()
+	public function render($data = false)
 	{    
-		$ns = ['math' => 'http://www.w3.org/1998/Math/MathML',
+		$this->parser->parse($data ?: new \bloc\dictionary);
+    
+    $ns = ['math' => 'http://www.w3.org/1998/Math/MathML',
 			     'svg'  => 'http://www.w3.org/2000/svg'
 			    ];
     
