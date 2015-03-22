@@ -5,7 +5,7 @@ b's Lode of Code
 
 ## Basic usage
 
-Create a file with something like this in it, index.php would be a good choice, obviously a web accessible spot.
+Create a file with something like this in it, index.php would be a good choice, obviously a web accessible spot if the intention is to create a computer internet website.
 
     namespace bloc;
 
@@ -21,7 +21,7 @@ Create a file with something like this in it, index.php would be a good choice, 
       // routes and requests
       $router  = new router('controllers', new request($_REQUEST));
       // default controller and action as arguments, in case nothin doin in the request
-      $router->delegate('some_controller', 'some_action');
+      $router->delegate('foo', 'bar');
     });
 
 
@@ -30,8 +30,9 @@ Create a file with something like this in it, index.php would be a good choice, 
     
 ## Some conventions.
 
-Part of my motivation in creating a framework is to (1) Avoid having a single dependency and (2) to create an entire system that you can feel like you comprehend. Part of getting there involves writing code that need not be explained via documentation, so I am avoiding docblocks and anything else that should be explainable by syntax and a few moments of careful study. To aid in parsing code, here are some of my idiosyncratic conventions:
+Part of my motivation in creating this framework is to avoid any/all dependencies and to create an very small and comprehensible system without any superfluity of features. In an effort to make code elegant enough to just read, I'm avoiding boilerplate docblocks and configuration. Keeping inheritance and interfaces as modest as possible to avoid scavenger hunts to find where simple variable is coming from and why it magically has some property that you have no idea how it came into being. So a few moments of careful study should do the trick. With that, here are some of my idiosyncratic conventions:
 
+- Anything particular, novel, or in any way configured will have to - nay, SHOULD BE - done in a model or controller.
 - a method starting with *rig* as in `rigThisThing` will always be returning a new instance of some object. Unlike a factory method, it will always provide you with the exact same object type back, but perhaps configured differently due to method arguments or environmental variables. **If you see a `$variable = $obj->rigMe();` the $variable will be an object!** 
  
 ## Templates
@@ -65,11 +66,11 @@ Here is an example:
  
  
 
-## Rewrites for cleaner urls.
+## Usage of a URL
 For advanced page routing, the framework expects variables like 'controller', 'action', and 'params'. Inside your controller action the params will be provided to you as arguments in the order received. For the clean look, a simple apache rewrite will clean things up. Here are examples:
 
     // This is the expected query string format:
-    http://example.com/?controller=some_controller&action=some_action&params=whatever/you/want
+    http://example.com/?controller=foo&action=bar&params=whatever/you/need
     
     // an apache rewrite:
     RewriteEngine On
@@ -77,17 +78,17 @@ For advanced page routing, the framework expects variables like 'controller', 'a
     RewriteRule ^([a-zA-Z]*)\/?([a-zA-Z]*)\/?(.*)?$ index.php?controller=$1&action=$2&params=$3 [B,QSA,L]
     
     // Will let you use this:
-    http://example.com/some_controller/some_action/whatever/you/want
+    http://example.com/foo/bar/whatever/you/want
     
 ## Controllers
 Moving on from the immediate example above, you should have a controller class named foo, with a method named bar. Here is what it would probably look like.
 
-    class some_controller
+    class foo
     {
-      public function some_action($some, $special, $arg)
+      public function bar($querystring, $params, $exploded)
       {
-        printf('this will print "%s" "%s" "%s"', $some, $special, $arg);
-        // siting url example above, output is: 'this will print "whatever" "you" "want"'
+        printf('OUTPUT: "%s" "%s" "%s" ', $querystring, $params, $exploded);
+        // OUTPUT "whatever" "you" "need"
       }
     }
     

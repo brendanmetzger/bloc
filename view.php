@@ -21,15 +21,18 @@ class View
     $this->xpath  = new \DomXpath($this->dom);
     $this->parser = new view\parser($this);
     
-    foreach ($this->parser->queryCommentNodes('insert') as $path => $node) {
+    foreach ($this->parser->queryCommentNodes('insert') as $stub) {
+      $path = trim(substr(trim($stub->nodeValue), 6));
       $element = $this->dom->importNode((new view($path))->dom->documentElement, true);
-      $node->parentNode->replaceChild($element, $node);
+      $stub->parentNode->replaceChild($element, $stub);
     }
   }
   
   public function __set($key, $path)
   {
-    foreach ($this->parser->queryCommentNodes("replace {$key}") as $adjacency => $stub) {
+    $command = "replace {$key}";
+    foreach ($this->parser->queryCommentNodes($command) as $stub) {
+      $adjacency = trim(substr(trim($stub->nodeValue),strlen($command)));
       $element = $this->dom->importNode((new view($path))->dom->documentElement, true);
       $stub->parentNode->replaceChild($element, $stub->{$adjacency});
 

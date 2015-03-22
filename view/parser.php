@@ -18,13 +18,13 @@ class Parser
   
   public function parse(\ArrayAccess $data)
   {
-    // cycle through iterators and see to their needs first
-    foreach ($this->queryCommentNodes('iterate') as $key => $node) {
-
-      $context = $node->parentNode->removeChild($node->nextSibling);
-      $matched = $this->getSlugs($context);
+    // cycle through iterators first, looking for <!-- iterate property --> nodes
+    foreach ($this->queryCommentNodes('iterate') as $node) {
+      $property = trim(substr(trim($node->nodeValue), 7));
+      $context  = $node->parentNode->removeChild($node->nextSibling);
+      $matched  = $this->getSlugs($context);
         
-        foreach ($data->{$key} as $datum) {
+        foreach ($data->{$property} as $datum) {
           foreach ($matched as $template) {
             $template->nodeValue = str_replace($template->matches, array_intersect_key($datum, $template->matches), $template->slug);
           }
@@ -43,16 +43,8 @@ class Parser
   
   public function queryCommentNodes($command)
   {
-    $output      = [];
-    $length      = strlen($command);
-    $expression  = sprintf("//descendant::comment()[starts-with(normalize-space(.), '%s')]", $command);
-    
-    foreach ($this->view->xpath->query($expression) as $node) {
-      $key = trim(substr(trim($node->nodeValue),$length));
-      $output[$key] = $node;
-    }
-
-    return $output;
+    $expression = "//descendant::comment()[starts-with(normalize-space(.), '%s')]";
+    return $this->view->xpath->query(sprintf($expression, $command));
   }
   
   public function getSlugs($context)
