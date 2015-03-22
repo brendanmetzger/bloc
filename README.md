@@ -1,6 +1,6 @@
 # bloc
 
-Brendan's Locus of Code
+B's Lode of Code
 
 
 ## Basic usage
@@ -34,9 +34,39 @@ Part of my motivation in creating a framework is to (1) Avoid having a single de
 
 - a method starting with *rig* as in `rigThisThing` will always be returning a new instance of some object. Unlike a factory method, it will always provide you with the exact same object type back, but perhaps configured differently due to method arguments or environmental variables. **If you see a `$variable = $obj->rigMe();` the $variable will be an object!** 
  
+## Templates
+Still under development, but they are all HTML and data is supplied via simple tagging with `[@var]`. The rules for tagging must be:
+
+### Syntax
+- the entire node must start with `[` and end with `]` and somewhere inside must contain an alphanumeric key bounded by the `@` symbol and a whitespace character. Remember, an attribute is a node as well, so same rules apply.
+- if the key does not exist the entire node will be deleted - this is a good thing, as it allows you to replicate the most common use case for conditions; showing and hiding data.
+- if you don't want to delete a node but have no data, make sure your data has that key, but make the value `null`
+- While Element or Attribute nodes must begin and end with `[` and `]` respectively, the @key can be anywhere. This allows you to not do extra data parsing (and v. handy in loops as you will see).
+
+Here is an example:
+    
+    // Given the markup
+    <p>[My favorite condiment is @condiment and I use it on everything]</p>
+    <input type="text" name="example" value="[@sticky]"/>
+    <p>[Welcome, @name]</p>
+    
+    // and the data
+    $data = ['condiment' => 'sauce', 'sticky' => null];
+
+    // after render, you'd have
+    <p>My favorite condiment is sauce and I use it on everything</p>
+    <input type="text" name="example" value=""/>
+    
+    // note that <p> has been removed because there is no @name varible
+    
+
+### Partials
+### Data Iteration 
+ 
+ 
 
 ## Rewrites for cleaner urls.
-For advanced page routing, the framework expects variables like 'controller', 'action', and 'params'. Use those, or for a cleaner look, parse the request string them with a rewrite, such as the apache one below:
+For advanced page routing, the framework expects variables like 'controller', 'action', and 'params'. Use those by requesting urls like `http://example.com/?controller=foo&action=bar&params=whatever/you/want`. Inside your controller action the params will be provided to you as arguments in the order received (exploded by backslash). For a cleaner look, parse the request string them with a rewrite, such as the apache one below:
 
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f

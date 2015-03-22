@@ -1,100 +1,60 @@
 <?php
 namespace bloc;
 
-
-
-
-
-/*
-  TODO there should be no `setPage` method. a new view shourd just be passed to another view. Consolodate plat into parser!
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
-  A view represents the object that will mash any XML based data together.
+ * A view represents the object that will mash any XML based data together, recursively.
  */
 class View
 {
   public $dom;
   public $xpath;
   public $parser;
-	
-  public static $webroot = '';
-  
-  /**
-   * Document Creator
-   *
-   * @param string $file
-   * @return \DomDocument object
-   */
-  private static function DOM($file)
+	  
+  public function __construct($template)
   {
-    $document = new \DomDocument('1.0', 'UTF-8');
-
-    $document->encoding           = 'UTF-8';
-    $document->preserveWhiteSpace = false;
-    $document->formatOutput       = true;
-    $document->load(PATH.view::$webroot.$file, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
-
-    return $document;
-  }
-  
-  public function __construct($template = '')
-  {
-    $this->dom    = self::DOM($template); 
+    $this->dom  = new \DomDocument('1.0', 'UTF-8');
+    $this->dom->encoding           = 'UTF-8';
+    $this->dom->preserveWhiteSpace = false;
+    $this->dom->formatOutput       = true;
+    $this->dom->load(PATH.$template, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
+    
     $this->xpath  = new \DomXpath($this->dom);
     $this->parser = new view\parser($this);
+    
+    foreach ($this->parser->queryCommentNodes('insert') as $path => $node) {
+      $element = $this->dom->importNode((new view($path))->dom->documentElement, true);
+  		$node->parentNode->replaceChild($element, $node);
+    }
   }
   
-  public function __set($key, $value)
+  public function __set($key, $path)
   {
-    foreach ($this->parser->queryCommentNodes("replace {$key}") as $adjacency => $node) {
-      $this->setPage($value, $node->{$adjacency});
-      $node->parentNode->removeChild($node);
+    foreach ($this->parser->queryCommentNodes("replace {$key}") as $adjacency => $stub) {
+      $element = $this->dom->importNode((new view($path))->dom->documentElement, true);
+      $stub->parentNode->replaceChild($element, $stub->{$adjacency});
+
+      // remove the original
+      $stub->parentNode->removeChild($stub);
     }
   }
-	
-	public function setPage($page, $swap)
-	{
-    $element = $this->dom->importNode(self::DOM($page)->documentElement, true);
-		$swap->parentNode->replaceChild($element, $swap);
-        
-    foreach ($this->parser->queryCommentNodes('insert') as $path => $node) {
-      $this->setPage($path, $node);
-    }
-	}
-	
+
 	public function render($data = false)
 	{    
-		$this->parser->parse($data ?: new \bloc\model\dictionary);
+    $this->parser->parse($data ?: new \bloc\model\dictionary);
     
     $ns = ['math' => 'http://www.w3.org/1998/Math/MathML',
 			     'svg'  => 'http://www.w3.org/2000/svg'
 			    ];
     
-    // Add namespaces
+    // 1st Loop: Add namespaces. 2nd: move necessary tags to head. 3rd: put javascript on bottom 
 		foreach ($this->xpath->query('/html/body//svg|/html/body//math') as $ns_elem) {
 			$ns_elem->setAttribute('xmlns', $ns[$ns_elem->nodeName]);
 		}
     
-    // Add links, meta, and style tags to the very top
     foreach ($this->xpath->query('/html/body//style|/html/body//meta|/html/body//link') as $head_node) {
       $this->dom->documentElement->firstChild->appendChild($head_node);
     }
     
-    // Put all Javascripts right at the bottom.
     foreach ($this->xpath->query('/html/body//script') as $javascript) {
       $this->dom->documentElement->lastChild->appendChild($javascript);
     }
