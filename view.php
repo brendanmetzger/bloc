@@ -78,7 +78,7 @@ class View
 	
 	public function render($data = false)
 	{    
-		$this->parser->parse($data ?: new \bloc\dictionary);
+		$this->parser->parse($data ?: new \bloc\model\dictionary);
     
     $ns = ['math' => 'http://www.w3.org/1998/Math/MathML',
 			     'svg'  => 'http://www.w3.org/2000/svg'
