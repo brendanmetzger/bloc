@@ -1,6 +1,6 @@
 # bloc
 
-B's Lode of Code
+b's Lode of Code
 
 
 ## Basic usage
@@ -39,9 +39,9 @@ Still under development, but they are all HTML and data is supplied via simple t
 
 ### Syntax
 - the entire node must start with `[` and end with `]` and somewhere inside must contain an alphanumeric key bounded by the `@` symbol and a whitespace character. Remember, an attribute is a node as well, so same rules apply.
-- if the key does not exist the entire node will be deleted - this is a good thing, as it allows you to replicate the most common use case for conditions; showing and hiding data.
-- if you don't want to delete a node but have no data, make sure your data has that key, but make the value `null`
-- While Element or Attribute nodes must begin and end with `[` and `]` respectively, the @key can be anywhere. This allows you to not do extra data parsing (and v. handy in loops as you will see).
+- if the key does not exist the entire node will be deleted - this is a good thing, as it allows you to avoid the most common bastardization of separating logic from the view, which is peppering your template with conditions to show/hide things based on your data.
+- if you don't want to delete a node because you *might* have data (input example below), make sure your data has that key, but make the value `null`
+- While Element or Attribute nodes must begin and end with `[` and `]` respectively, the @key can be anywhere. This allows you to not do extra data parsing (also handy in loops as you will see).
 
 Here is an example:
     
@@ -66,8 +66,29 @@ Here is an example:
  
 
 ## Rewrites for cleaner urls.
-For advanced page routing, the framework expects variables like 'controller', 'action', and 'params'. Use those by requesting urls like `http://example.com/?controller=foo&action=bar&params=whatever/you/want`. Inside your controller action the params will be provided to you as arguments in the order received (exploded by backslash). For a cleaner look, parse the request string them with a rewrite, such as the apache one below:
+For advanced page routing, the framework expects variables like 'controller', 'action', and 'params'. Inside your controller action the params will be provided to you as arguments in the order received. For the clean look, a simple apache rewrite will clean things up. Here are examples:
 
+    // This is the expected query string format:
+    http://example.com/?controller=some_controller&action=some_action&params=whatever/you/want
+    
+    // an apache rewrite:
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^([a-zA-Z]*)\/?([a-zA-Z]*)\/?(.*)?$ index.php?controller=$1&action=$2&params=$3 [B,QSA,L]
+    
+    // Will let you use this:
+    http://example.com/some_controller/some_action/whatever/you/want
+    
+## Controllers
+Moving on from the immediate example above, you should have a controller class named foo, with a method named bar. Here is what it would probably look like.
+
+    class some_controller
+    {
+      public function some_action($some, $special, $arg)
+      {
+        printf('this will print "%s" "%s" "%s"', $some, $special, $arg);
+        // siting url example above, output is: 'this will print "whatever" "you" "want"'
+      }
+    }
+    
+    

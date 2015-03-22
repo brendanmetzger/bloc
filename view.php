@@ -23,7 +23,7 @@ class View
     
     foreach ($this->parser->queryCommentNodes('insert') as $path => $node) {
       $element = $this->dom->importNode((new view($path))->dom->documentElement, true);
-  		$node->parentNode->replaceChild($element, $node);
+      $node->parentNode->replaceChild($element, $node);
     }
   }
   
