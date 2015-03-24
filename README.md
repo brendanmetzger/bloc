@@ -1,9 +1,22 @@
-# bloc
-
-*B's lode of code*
+# **b**'s **l**ibrary **o**f **c**ode
 
 
-## Basic usage
+Part of my motivation in creating a framework is an experiment in creating a powerful(ish) tool that can truly avoid *all* dependencies. I feel that such a tool would necessarily be a small and comprehensible system. In an effort to make code easy enough to read, I'm avoiding boilerplate docblocks and keeping inheritance and interfaces as modest as possible, and this should help to avoid scavenger hunts cracking open dozens of files to find out how/why some magical property exists. With a few moments of careful study things should make sense.
+
+## Requirements
+
+### For the computer
+
+- php 5.5 (the current default I believe)
+
+### For the human
+
+- PHP
+- XML format
+- the [Document Object Model](http://en.wikipedia.org/wiki/Document_Object_Model)
+- Object Oriented Programming Basics
+
+## Basic Usage
 
 Create a file with something like this in it, index.php would be a good choice, obviously a web accessible spot if the intention is to create a computer internet website.
 
@@ -37,13 +50,7 @@ Create a file with something like this in it, index.php would be a good choice, 
     $app->run('http-request');
     
 ```
-    
-## Some conventions.
-
-Part of my motivation in creating this framework is to avoid any/all dependencies and to create a small and comprehensible system without any superfluity of features. In an effort to make code easy enough to read, I'm avoiding boilerplate docblocks. Keeping inheritance and interfaces as modest as possible to avoid scavenger hunts to find where simple variable is coming from and why it magically has some property that you have no idea how it came into being. So a few moments of careful study should do the trick. With that, here are some of my idiosyncratic conventions:
-
-- Anything particular, novel, or in any way configured will have to - nay, SHOULD BE - done in a model or controller.
-
+  
  
 ## Templates
 
