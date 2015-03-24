@@ -14,10 +14,10 @@ class Router
   public $request;
   private $namespace;
   
-  public function __construct($namespace, $request)
+  public function __construct($namespace, \bloc\request $request = null)
   {
     $this->namespace = NS . $namespace . NS;
-    $this->request   = $request;
+    $this->request   = $request ?: new \bloc\request(['controller' => null, 'action' => null]);
   }
   
   # Returns a http://php.net/reflectionmethod
@@ -35,14 +35,13 @@ class Router
     $controller = $this->namespace . ($this->request->controller ?: $controller);
 
     $control  = new \ReflectionClass($controller);
-    $instance = $control->newInstance();
-
+    
     try {
       $action  = $this->rigAction($control, $this->request->action ?: $action);
+      $instance = $control->newInstance($this->request, $action->isPublic());
 
       if ( $action->isProtected() ) {
-        session_start();
-        $action->setAccessible(array_key_exists('user', $_SESSION));        
+        $action->setAccessible($instance->authenticated);        
       }
       
       $action->invokeArgs($instance, $this->request->params);

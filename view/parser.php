@@ -30,11 +30,14 @@ class Parser
     }
 
     foreach ($this->getSlugs() as $template) {
+      
       $slug = substr($template->nodeValue, 1,-1);
       preg_match_all('/\@([a-z\_\:0-9]+)\b/i', $slug, $matches);
       $matches = array_combine($matches[1], $matches[0]);
       ksort($matches);
+      
       $replacements = $data->intersection($matches);
+      
       if (count($matches) === count($replacements)) {
         $template->nodeValue = str_replace($matches, $replacements, $slug);
       } else {

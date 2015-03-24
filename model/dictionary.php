@@ -15,7 +15,7 @@ class Dictionary extends \ArrayIterator
   
   public function __set($key, $value)
   {
-    $this->storage[$key] = $value;
+    $this[$key] = $value;
   }
   
   public function __get($key)
@@ -24,11 +24,6 @@ class Dictionary extends \ArrayIterator
       return [];
     }
     return is_array($this[$key]) ? new Dictionary($this[$key]) : $this[$key];
-  }
-  
-  public function push(array $item)
-  {
-    $this->storage[] = $item;
   }
   
   public function current()
