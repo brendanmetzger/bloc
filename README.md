@@ -11,14 +11,20 @@ Create a file with something like this in it, index.php would be a good choice, 
 
     namespace bloc;
 
-    #1. Frow where index.php is located, load the application file. Notice the bloc directory is outside of the web directory - you can of course decide on your own structure, but a swell idea to keep it outside of your document root.
+    #1. Frow where index.php is located, load the application file. 
+    // Notice the bloc directory is outside of the web directory - you can of course 
+    // decide on your own structure, but a swell idea to keep it outside of your document root.
+
     require_once  '../bloc/application.php';
 
 
     #2. Create an instance of the application
     $app = new application;
 
-    #3. All code is executed in a callback. You can have a queue of things go off according to certain situations. Here http-request is the only callback specified. 
+    #3. All code is executed in a callback. 
+    // You can have a queue of things go off according to certain situations. 
+    // Here http-request is the only callback specified. 
+    
     $app->queue('http-request', function($app) {
       // routes and requests
       $router  = new router('controllers', new request($_REQUEST));
@@ -34,24 +40,24 @@ Create a file with something like this in it, index.php would be a good choice, 
     
 ## Some conventions.
 
-Part of my motivation in creating this framework is to avoid any/all dependencies and to create an very small and comprehensible system without any superfluity of features. In an effort to make code elegant enough to just read, I'm avoiding boilerplate docblocks and configuration. Keeping inheritance and interfaces as modest as possible to avoid scavenger hunts to find where simple variable is coming from and why it magically has some property that you have no idea how it came into being. So a few moments of careful study should do the trick. With that, here are some of my idiosyncratic conventions:
+Part of my motivation in creating this framework is to avoid any/all dependencies and to create a small and comprehensible system without any superfluity of features. In an effort to make code easy enough to read, I'm avoiding boilerplate docblocks. Keeping inheritance and interfaces as modest as possible to avoid scavenger hunts to find where simple variable is coming from and why it magically has some property that you have no idea how it came into being. So a few moments of careful study should do the trick. With that, here are some of my idiosyncratic conventions:
 
 - Anything particular, novel, or in any way configured will have to - nay, SHOULD BE - done in a model or controller.
-- a method starting with *rig* as in `rigThisThing` will always be returning a new instance of some object. Unlike a factory method, it will always provide you with the exact same object type back, but perhaps configured differently due to method arguments or environmental variables. **If you see a `$variable = $obj->rigMe();` the $variable will be an object!** 
+
  
 ## Templates
 
 #### Goals
 - eliminate ugly looping structure
 - eliminate conditions
-- enforce perfect structure (with nicely formatted output as some icing)
+- enforce perfect structure (with nicely formatted output as a byproduct)
 - absolutely no logic in the view files
 - recursive (partials insert partials) with no additional flags or programming needed.
 
-Still under development, but they templates are 100% HTML (really XML) and data is supplied via simple tagging with `[@var]`.
+Still under development, but so far, templates are 100% valid markup and data is supplied via simple tagging with `[@var]`.
 
 ### Syntax
-- the entire node must start with `[` and end with `]` and somewhere inside must contain an alphanumeric key bounded by the `@` symbol and a whitespace character. Remember, an attribute is a node as well, so same rules apply.
+- the entire node must start with `[` and end with `]` and somewhere inside must contain an alphanumeric key bounded by preceded with the `@` symbol. Remember, an attribute is a node as well, so same rules apply.
 - if the key does not exist the entire node will be deleted - this is a good thing, as it allows you to avoid the most common bastardization of separating logic from the view, which is peppering your template with conditions to show/hide things based on your data.
 - if you don't want to delete a node because you *might* have data (input example below), make sure your data has that key, but make the value `null`
 - While Element or Attribute nodes must begin and end with `[` and `]` respectively, the @key can be anywhere. This allows you to not do extra data parsing (also handy in loops as you will see).
@@ -91,7 +97,13 @@ Here is an example:
 
 Insert any html file by inserting a regular HTML comment node that looks like this:
 
-`<!-- insert path/to/wherever/the/file/is.ext -->`
+```HTML
+
+    <body>
+      <!-- insert path/to/wherever/the/file/is.ext -->`
+    </body>
+
+```
 
 The application will limit the files to the root of the directory the application resides in. That seems to make sense, but it could, of course, be changed on a whim.
 
@@ -124,8 +136,12 @@ And greeting.html might have something like above:
     <div>
       <p>[Welcome, @name]</p>
     </div>
+    
+```
 
-    <!-- So noting the Dictionary object passed to the `view::render` above, you actually get: -->
+So noting the Dictionary object passed to the `view::render` above, you actually get:
+
+```HTML
 
     <div>
       <p>Welcome, Guillermo</p>
