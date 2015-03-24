@@ -19,9 +19,7 @@ class View
     $this->dom->encoding           = 'UTF-8';
     $this->dom->preserveWhiteSpace = false;
     $this->dom->formatOutput       = true;
-    
-    $this->dom->registerNodeClass('\\DOMElement', '\\bloc\\Element');
-    
+        
     if (is_string($document_element)) {
       $this->dom->load(PATH.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
     } else if ($document_element instanceof \DOMNode) {
