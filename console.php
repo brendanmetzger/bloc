@@ -8,10 +8,14 @@ namespace bloc;
 class Console
 {
   
-  static public function dump($data = null) {
-    echo "<pre>";
-    var_dump($data);
-    echo "</pre>";
+  static public function dump() {
+    echo "<pre>--------------\n";
+    foreach (func_get_args() as $arg) {
+       echo "\n --- ";
+       print_r($arg);
+       echo " --- \n";
+    }
+    echo "\n--------------</pre>";
   }
 
   static public function error($exception, $level) {

@@ -20,20 +20,16 @@ class Parser
   {
     // cycle through iterators first, looking for <!-- iterate property --> nodes
     foreach ($this->queryCommentNodes('iterate') as $node) {
+      $template = $node->parentNode->removeChild($node->nextSibling);
       $property = trim(substr(trim($node->nodeValue), 7));
-      $context  = $node->parentNode->removeChild($node->nextSibling);
-      $matched  = $this->getSlugs($context);
-        
-        foreach ($data->{$property} as $datum) {
-          foreach ($matched as $template) {
-            $template->nodeValue = str_replace($template->matches, array_intersect_key($datum, $template->matches), $template->slug);
-          }
-          $node->parentNode->insertBefore($context->cloneNode(true), $node);
-        }
-        $node->parentNode->removeChild($node);      
+
+      try {
+        $this->mapIterator($template, $node, $data->{$property});
+      } catch (\RuntimeException $e) {
+       \bloc\console::error($e, 2);
+      }
     }
     
-    // find document wide placeholders
     foreach ($this->getSlugs($this->view->dom->documentElement) as $template) {
       $datum = $data->intersection($template->matches);
       ksort($datum);
@@ -41,10 +37,23 @@ class Parser
     }
   }
   
+  private function mapIterator($template, $placeholder, $data)
+  {
+    foreach ($data as $datum) {
+      $view = new \bloc\view($template);
+      $view->render(new \bloc\model\dictionary($datum), false);
+      $imported_view = $this->view->dom->importNode($view->dom->documentElement, true);
+      $placeholder->parentNode->insertBefore($imported_view, $placeholder);
+    }
+    $placeholder->parentNode->removeChild($placeholder);
+  }
+  
   public function queryCommentNodes($command)
   {
-    $expression = "//descendant::comment()[starts-with(normalize-space(.), '%s')]";
-    return $this->view->xpath->query(sprintf($expression, $command));
+    $command = "starts-with(normalize-space(.), '{$command}')";
+    $expression = "./descendant::comment()[{$command} and not(./ancestor::*/preceding-sibling::comment()[{$command}])]";
+    
+    return $this->view->xpath->query($expression);
   }
   
   public function getSlugs($context)

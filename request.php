@@ -9,7 +9,7 @@ class Request
   private $params = [];
   public function __construct($data)
   {
-    $data['params'] = explode('/', ($data['params']));
+    $data['params'] = array_filter(explode('/', ($data['params'])));
     $this->params = $data;
   }
   
