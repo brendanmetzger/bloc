@@ -26,22 +26,26 @@ class Parser
       try {
         $this->mapIterator($template, $node, $data->{$property});
       } catch (\RuntimeException $e) {
-       \bloc\console::error($e, 2);
+       \bloc\application::error($e, 2);
       }
     }
-    
-    foreach ($this->getSlugs($this->view->dom->documentElement) as $template) {
-      $datum = $data->intersection($template->matches);
-      ksort($datum);
-      $template->nodeValue = str_replace($template->matches, $datum, $template->slug);
+
+    foreach ($this->getSlugs() as $template) {
+      $slug = substr($template->nodeValue, 1,-1);
+      preg_match_all('/\@([a-z\_\:0-9]+)\b/i', $slug, $matches);
+      $matches = array_combine($matches[1], $matches[0]);
+      ksort($matches);
+      $template->nodeValue = str_replace($matches, $data->intersection($matches), $slug);
     }
+    
+
   }
   
-  private function mapIterator($template, $placeholder, $data)
+  private function mapIterator(\DOMNode $template, \DOMNode $placeholder, $data)
   {
     foreach ($data as $datum) {
       $view = new \bloc\view($template);
-      $view->render(new \bloc\model\dictionary($datum), false);
+      $view->render(new \bloc\model\dictionary($datum));
       $imported_view = $this->view->dom->importNode($view->dom->documentElement, true);
       $placeholder->parentNode->insertBefore($imported_view, $placeholder);
     }
@@ -56,10 +60,10 @@ class Parser
     return $this->view->xpath->query($expression);
   }
   
-  public function getSlugs($context)
+  public function getSlugs()
   {
     # start with the current element and look for nodes
-    $exp = "./descendant-or-self::*[";
+    $exp = "//descendant-or-self::*[";
     # if starts with the open placeholder
     $exp .= "substring(.,1,1) = '[' and ";
     # and contains the variable symbole key
@@ -69,7 +73,7 @@ class Parser
     # and does not contain any other nodes
     $exp .= "not(*)]";
     # union search for the attribute nodes
-    $exp .= "|./descendant-or-self::*/@*[";
+    $exp .= "|//descendant-or-self::*/@*[";
     # if it starts with the open placeholder
     $exp .= "substring(.,1,1) = '[' and ";
     # and it contains the variable symbol key
@@ -77,14 +81,6 @@ class Parser
     # and ends with the close placeholder
     $exp .= "substring(., string-length(.), 1) = ']']";
     
-    $nodes = $this->view->xpath->query($exp, $context);
-    
-    foreach ($nodes as $template) {
-      preg_match_all('/\@([a-z\_\:0-9]+)\b/i', substr($template->nodeValue, 1, -1), $matches);
-      $template->matches = array_combine($matches[1], $matches[0]);
-      ksort($template->matches);
-      $template->slug = substr($template->nodeValue, 1,-1);
-    }
-    return $nodes;
+    return $this->view->xpath->query($exp);
   }
 }

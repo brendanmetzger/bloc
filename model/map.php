@@ -9,7 +9,7 @@ namespace bloc\model;
 class Map extends Dictionary
 {
   private $callback;
-  public function __construct($array, $callback)
+  public function __construct($array, callable $callback)
   {
     parent::__construct($array);
     $this->callback = $callback;

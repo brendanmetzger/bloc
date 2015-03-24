@@ -36,7 +36,6 @@ class Dictionary extends \ArrayIterator
     $item = parent::current();
 
     if (is_array($item)) {
-
       ksort($item);
     }
     return $item;

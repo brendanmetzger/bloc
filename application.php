@@ -30,6 +30,31 @@ class Application
 {  
   private $_callbacks = [];
   
+  static public function dump() {
+    echo "<pre>--------------\n";
+    foreach (func_get_args() as $arg) {
+       echo "\n --- ";
+       print_r($arg);
+       echo " --- \n";
+    }
+    echo "\n--------------</pre>";
+  }
+
+  static public function error($exception, $level) {
+    self::dump($exception->getMessage());
+    
+    if ($level > 1) {
+      self::dump($exception->getLine());
+      self::dump($exception->getFile());
+    }
+    
+    if ($level > 2) {
+      $trace = $exception->getTrace();
+      $called = $trace[0];
+      self::dump("problem in {$called['function']} - line {$called['line']} in {$called['file']}");
+    }
+  }
+  
   public function __construct()
   {
     set_include_path(get_include_path() . PATH_SEPARATOR . PATH);
@@ -47,11 +72,11 @@ class Application
     try {
       call_user_func($this->_callbacks[$env], $this);
     } catch (\LogicException $e) {
-      console::error($e, 1);
+      application::error($e, 1);
     } catch (\RunTimeException $e) {
-      console::error($e, 2);
+      application::error($e, 2);
     } catch (\Exception $e) {
-      console::error($e, 3);
+      application::error($e, 3);
     }
   }
 
