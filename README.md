@@ -36,7 +36,14 @@ Part of my motivation in creating this framework is to avoid any/all dependencie
 - a method starting with *rig* as in `rigThisThing` will always be returning a new instance of some object. Unlike a factory method, it will always provide you with the exact same object type back, but perhaps configured differently due to method arguments or environmental variables. **If you see a `$variable = $obj->rigMe();` the $variable will be an object!** 
  
 ## Templates
-Still under development, but they are all HTML and data is supplied via simple tagging with `[@var]`. The rules for tagging must be:
+#### Goals
+- eliminate ugly looping structure
+- eliminate conditions
+- enforce perfect structure (with nicely formatted output as some icing)
+- absolutely no logic in the view files
+- recursive (partials insert partials) with no additional flags or programming needed.
+
+Still under development, but they templates are 100% HTML (really XML) and data is supplied via simple tagging with `[@var]`.
 
 ### Syntax
 - the entire node must start with `[` and end with `]` and somewhere inside must contain an alphanumeric key bounded by the `@` symbol and a whitespace character. Remember, an attribute is a node as well, so same rules apply.
@@ -62,9 +69,75 @@ Here is an example:
     
 
 ### Partials
-### Data Iteration 
- 
- 
+
+#### Inserting 
+
+Insert any html file by inserting a regular HTML comment node that looks like this:
+
+`<!-- insert path/to/wherever/the/file/is.ext -->`
+
+The application will limit the files to the root of the directory the application resides in. That seems to make sense, but it could, of course, be changed on a whim.
+
+#### Replacing
+
+There are times you may want to replace a default node, most likely in the main layout, or perhaps if you want someone to see something different if they have a session started. That can be accomplished by this:
+
+    <!-- replace propertyName nextSibling -->
+    <div>
+      <p>Welcome Strange Guest</p>
+    </div>
+
+
+And to facilitate that change, you will need an instance of `\bloc\view` where you simple set a property with a url.
+
+    $view = new \bloc\view('some/path/to/layout.html');
+    $view->propertyName = 'some/path/to/special/greeting.html';
+    $view->render(new \bloc\model\dictionary([name => 'Guillermo']));
+    
+And greeting.html might have something like above:
+
+    <div>
+      <p>[Welcome, @name]</p>
+    </div>
+
+So noting the Dictionary object passed to the `view::render` above, you actually get:
+
+      <div>
+        <p>Welcome, Guillermo</p>
+      </div>
+      
+
+### Data Iteration
+The Most daunting aspect, by far, is getting rid of all the ugly {{}} and %% iterators commonly found in template systems. Also, enforcing purity is really nice - with this markup based template, you literally cannot add any logic to the view files - if you want to sort, filter or modify content in any way you **must** specify those changes either directly in the data, in the controller, in the model, or through a `Map` callback that can be run when the template parser iterates the nodes. Without further adieu:
+
+    <!-- iterate calendars -->
+    <div>
+      <h2>[@month]</h2>
+      <-- iterate days -->
+      <div>[@day]</div>
+      <!-- iterate dates -->
+      <span>[@date]</span>
+    </div>
+
+
+
+This is a nested for loop, so you'll need some hierarchical data, so let's pretend we have a calendar object that gives us what we want:
+    
+    $calendar = new \MadeUp\Calendar();
+    
+    $data = new \bloc\dictionary([
+      'calendars => [
+        'month' => 'Jan',
+        'days'  => new \bloc\Map(['m','t','w','t','f','s','s,], function($day) {return ['day' => $day];}),
+        'date'  => $calendar->daysInJan(),
+      ]
+    ]);
+    
+    $view->render($data);
+    
+    // you get the gist...
+    
+    
 
 ## Usage of a URL
 For advanced page routing, the framework expects variables like 'controller', 'action', and 'params'. Inside your controller action the params will be provided to you as arguments in the order received. For the clean look, a simple apache rewrite will clean things up. Here are examples:
