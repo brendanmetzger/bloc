@@ -5,11 +5,11 @@ namespace bloc;
 # shorthand for namespace separator ( \ )
 define('NS', '\\');
 
-# shorthand for directory separator ( / )
-define('DS',DIRECTORY_SEPARATOR);
-
 # the ONLY path constant, thus, aptly named.
-define('PATH', realpath('../') . DS);
+define('PATH', realpath('../') . DIRECTORY_SEPARATOR);
+
+require PATH . 'bloc/router.php';
+require PATH . 'bloc/request.php';
 
 
 /**
@@ -70,7 +70,7 @@ class Application
   public function run($env)
   {
     try {
-      call_user_func($this->_callbacks[$env], $this);
+      return call_user_func($this->_callbacks[$env], $this);      
     } catch (\LogicException $e) {
       application::error($e, 1);
     } catch (\RunTimeException $e) {
@@ -82,12 +82,12 @@ class Application
 
   private function autoload($class)
   { 
-    @include str_replace(NS, DS, $class) . '.php';
+    @include str_replace(NS, DIRECTORY_SEPARATOR, $class) . '.php';
   }
 
   public function failtoload($class)
   {
-    if (! file_exists(PATH . str_replace(NS, DS, $class) . '.php')) {
+    if (! file_exists(PATH . str_replace(NS, DIRECTORY_SEPARATOR, $class) . '.php')) {
       throw new \LogicException("What the hell is this '{$class}' file you are referring to?", 1);  
     }
     
