@@ -1,11 +1,13 @@
 # bloc
 
-b's Lode of Code
+*B's lode of code*
 
 
 ## Basic usage
 
 Create a file with something like this in it, index.php would be a good choice, obviously a web accessible spot if the intention is to create a computer internet website.
+
+```PHP
 
     namespace bloc;
 
@@ -28,6 +30,8 @@ Create a file with something like this in it, index.php would be a good choice, 
     #4. Run the app. Nothing happens w/o this. Can call different stuff from the queue.
     $app->run('http-request');
     
+```
+    
 ## Some conventions.
 
 Part of my motivation in creating this framework is to avoid any/all dependencies and to create an very small and comprehensible system without any superfluity of features. In an effort to make code elegant enough to just read, I'm avoiding boilerplate docblocks and configuration. Keeping inheritance and interfaces as modest as possible to avoid scavenger hunts to find where simple variable is coming from and why it magically has some property that you have no idea how it came into being. So a few moments of careful study should do the trick. With that, here are some of my idiosyncratic conventions:
@@ -36,6 +40,7 @@ Part of my motivation in creating this framework is to avoid any/all dependencie
 - a method starting with *rig* as in `rigThisThing` will always be returning a new instance of some object. Unlike a factory method, it will always provide you with the exact same object type back, but perhaps configured differently due to method arguments or environmental variables. **If you see a `$variable = $obj->rigMe();` the $variable will be an object!** 
  
 ## Templates
+
 #### Goals
 - eliminate ugly looping structure
 - eliminate conditions
@@ -52,21 +57,33 @@ Still under development, but they templates are 100% HTML (really XML) and data 
 - While Element or Attribute nodes must begin and end with `[` and `]` respectively, the @key can be anywhere. This allows you to not do extra data parsing (also handy in loops as you will see).
 
 Here is an example:
+
     
-    // Given the markup
+```HTML
+
+    <!-- Given the markup -->
     <p>[My favorite condiment is @condiment and I use it on everything]</p>
     <input type="text" name="example" value="[@sticky]"/>
     <p>[Welcome, @name]</p>
-    
+
+```    
+
+```PHP
+
     // and the data
     $data = ['condiment' => 'sauce', 'sticky' => null];
 
-    // after render, you'd have
+```
+
+```HTML
+
+    <!-- after render, you'd have -->
     <p>My favorite condiment is sauce and I use it on everything</p>
     <input type="text" name="example" value=""/>
-    
-    // note that <p> has been removed because there is no @name varible
-    
+
+    <!-- note that <p> has been removed because there is no @name varible -->
+
+```
 
 ### Partials
 
@@ -82,33 +99,44 @@ The application will limit the files to the root of the directory the applicatio
 
 There are times you may want to replace a default node, most likely in the main layout, or perhaps if you want someone to see something different if they have a session started. That can be accomplished by this:
 
+```HTML
+
     <!-- replace propertyName nextSibling -->
     <div>
       <p>Welcome Strange Guest</p>
     </div>
 
+```
 
 And to facilitate that change, you will need an instance of `\bloc\view` where you simple set a property with a url.
+
+```PHP
 
     $view = new \bloc\view('some/path/to/layout.html');
     $view->propertyName = 'some/path/to/special/greeting.html';
     $view->render(new \bloc\model\dictionary([name => 'Guillermo']));
+
+```
     
 And greeting.html might have something like above:
+```HTML
 
     <div>
       <p>[Welcome, @name]</p>
     </div>
 
-So noting the Dictionary object passed to the `view::render` above, you actually get:
+    <!-- So noting the Dictionary object passed to the `view::render` above, you actually get: -->
 
-      <div>
-        <p>Welcome, Guillermo</p>
-      </div>
-      
+    <div>
+      <p>Welcome, Guillermo</p>
+    </div>
+    
+```  
 
 ### Data Iteration
 The Most daunting aspect, by far, is getting rid of all the ugly {{}} and %% iterators commonly found in template systems. Also, enforcing purity is really nice - with this markup based template, you literally cannot add any logic to the view files - if you want to sort, filter or modify content in any way you **must** specify those changes either directly in the data, in the controller, in the model, or through a `Map` callback that can be run when the template parser iterates the nodes. Without further adieu:
+
+```HTML
 
     <!-- iterate calendars -->
     <div>
@@ -119,10 +147,12 @@ The Most daunting aspect, by far, is getting rid of all the ugly {{}} and %% ite
       <span>[@date]</span>
     </div>
 
-
+```
 
 This is a nested for loop, so you'll need some hierarchical data, so let's pretend we have a calendar object that gives us what we want:
-    
+   
+```PHP 
+
     $calendar = new \MadeUp\Calendar();
     
     $data = new \bloc\dictionary([
@@ -137,7 +167,7 @@ This is a nested for loop, so you'll need some hierarchical data, so let's prete
     
     // you get the gist...
     
-    
+```    
 
 ## Usage of a URL
 For advanced page routing, the framework expects variables like 'controller', 'action', and 'params'. Inside your controller action the params will be provided to you as arguments in the order received. For the clean look, a simple apache rewrite will clean things up. Here are examples:
@@ -145,16 +175,22 @@ For advanced page routing, the framework expects variables like 'controller', 'a
     // This is the expected query string format:
     http://example.com/?controller=foo&action=bar&params=whatever/you/need
     
-    // an apache rewrite:
+```ApacheConf
+
+    # an apache rewrite:
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^([a-zA-Z]*)\/?([a-zA-Z]*)\/?(.*)?$ index.php?controller=$1&action=$2&params=$3 [B,QSA,L]
-    
+   
+``` 
+   
     // Will let you use this:
     http://example.com/foo/bar/whatever/you/want
     
 ## Controllers
 Moving on from the immediate example above, you should have a controller class named foo, with a method named bar. Here is what it would probably look like.
+
+```PHP
 
     class foo
     {
@@ -165,4 +201,4 @@ Moving on from the immediate example above, you should have a controller class n
       }
     }
     
-    
+```    
