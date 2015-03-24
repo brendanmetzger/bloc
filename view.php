@@ -49,8 +49,6 @@ class View
       $adjacency = trim(substr(trim($stub->nodeValue),strlen($command)));
       $element = $this->dom->importNode($view->dom->documentElement, true);
       $stub->parentNode->replaceChild($element, $stub->{$adjacency});
-
-      // remove the original
       $stub->parentNode->removeChild($stub);
     }
   }
@@ -62,11 +60,10 @@ class View
   
 	public function render($data = false)
 	{    
-    
     foreach ($this->renderers['before'] as $callback) {
       call_user_func($callback);
     }
-
+    
     $this->parser->parse($data ?: new \bloc\model\dictionary);
     
     foreach ($this->renderers['after'] as $callback) {

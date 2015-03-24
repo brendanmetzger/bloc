@@ -3,8 +3,8 @@
 namespace bloc\view;
 
 /**
-* Parser
-*/
+ * Parser
+ */
 
 class Parser
 {
@@ -14,7 +14,6 @@ class Parser
   {
     $this->view = $view;
   }
-  
   
   public function parse(\ArrayAccess $data)
   {
@@ -37,8 +36,6 @@ class Parser
       ksort($matches);
       $template->nodeValue = str_replace($matches, $data->intersection($matches), $slug);
     }
-    
-
   }
   
   private function mapIterator(\DOMNode $template, \DOMNode $placeholder, $data)
