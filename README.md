@@ -1,7 +1,7 @@
-# **b**'s **l**ibrary **o**f **c**ode
+# *bloc*
 
 
-Part of my motivation in creating a framework is an experiment in creating a powerful(ish) tool that can truly avoid *all* dependencies. I feel that such a tool would necessarily be a small and comprehensible system. In an effort to make code easy enough to read, I'm avoiding boilerplate docblocks and keeping inheritance and interfaces as modest as possible, and this should help to avoid scavenger hunts cracking open dozens of files to find out how/why some magical property exists. With a few moments of careful study things should make sense.
+Part of my motivation in creating a framework is an experiment in creating a simple but powerful tool that can truly avoid *all* dependencies while remaining a small and comprehensible system. In an effort to make code easy enough to read, I'm avoiding boilerplate docblocks and keeping inheritance and interfaces as modest as possible, helping avoid scavenger hunts through dozens of files to find out how or why some magical property exists. With a few moments of careful study things should make sense.
 
 ## Requirements
 
@@ -12,9 +12,10 @@ Part of my motivation in creating a framework is an experiment in creating a pow
 ### For the human
 
 - PHP
-- XML format
+- Website stuff (HTML,CSS, Javascript), but especially XML and the whole <tag/> landscape.
 - the [Document Object Model](http://en.wikipedia.org/wiki/Document_Object_Model)
-- Object Oriented Programming Basics
+- Object Oriented Basics
+
 
 ## Basic Usage
 
@@ -55,15 +56,16 @@ Create a file with something like this in it, index.php would be a good choice, 
 ## Templates
 
 #### Goals
-- eliminate ugly looping structure
-- eliminate conditions
-- enforce perfect structure (with nicely formatted output as a byproduct)
-- absolutely no logic in the view files
+- templates contain only one language grammar (and can thus be validated)
+- simple variable syntax
+- no ugly looping structures
+- no conditions allowed, nor any function calls allowed in the view files 
+- input/output can be validated and formatted
 - recursive (partials insert partials) with no additional flags or programming needed.
 
-Still under development, but so far, templates are 100% valid markup and data is supplied via simple tagging with `[@var]`.
 
 ### Syntax
+- templates are plain XML or HTML files, and there must always be a root node. ie. `<b/><c/>` = bad `<a><b/><c/></a>` = good
 - the entire node must start with `[` and end with `]` and somewhere inside must contain an alphanumeric key preceded with an `@` symbol. Remember, an attribute is a node as well, so same rules apply.
 - if the key does not exist the entire node will be deleted - this is a good thing, as it allows you to avoid the most common bastardization of separating logic from the view, which is peppering your template with conditions to show/hide things based on your data.
 - if you don't want to delete a node because you *might* have data (input example below), make sure your data has that key, but make the value `null` or an empty string.
@@ -165,7 +167,7 @@ The Most daunting aspect, by far, is getting rid of all the ugly {{}} and %% ite
     <div>
       <h2>[@month]</h2>
       <-- iterate days -->
-      <div>[@day]</div>
+      <div>[@letter]</div>
       <!-- iterate dates -->
       <span>[@date]</span>
     </div>
@@ -181,8 +183,10 @@ This is a nested for loop, so you'll need some hierarchical data, so let's prete
     $data = new \bloc\dictionary([
       'calendars => [
         'month' => 'Jan',
-        'days'  => new \bloc\Map(['m','t','w','t','f','s','s,], function($day) {return ['day' => $day];}),
-        'date'  => $calendar->daysInJan(),
+        'days'  => new \bloc\Map(['m','t','w','t','f','s','s,], function($day) {
+          return ['letter' => $day];
+        }),
+        'date'  => $calendar->daysInJan(), // assume that this returns an array [['date'=>1],['date'=>2]...]
       ]
     ]);
     
