@@ -34,7 +34,16 @@ class Parser
       preg_match_all('/\@([a-z\_\:0-9]+)\b/i', $slug, $matches);
       $matches = array_combine($matches[1], $matches[0]);
       ksort($matches);
-      $template->nodeValue = str_replace($matches, $data->intersection($matches), $slug);
+      $replacements = $data->intersection($matches);
+      if (count($matches) === count($replacements)) {
+        $template->nodeValue = str_replace($matches, $replacements, $slug);
+      } else {
+        $type = $template->nodeType == 2 ? 'removeAttribute' : 'removeChild';
+        $name = $template->nodeType == 2 ? $template->nodeName : $template;
+        
+        $template->parentNode->{$type}($name);
+      }
+      
     }
   }
   

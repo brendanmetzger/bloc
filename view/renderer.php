@@ -14,10 +14,12 @@ class Renderer
   public static function HTML()
   {
     return function($view) {
+      // move style, meta, and link tags up to the head.
       foreach ($view->xpath->query('/html/body//style|/html/body//meta|/html/body//link') as $head_node) {
         $view->dom->documentElement->firstChild->appendChild($head_node);
       }
-    
+      
+      // move all script tags down to the bottom.
       foreach ($view->xpath->query('/html/body//script') as $javascript) {
         $view->dom->documentElement->lastChild->appendChild($javascript);
       }
@@ -31,6 +33,7 @@ class Renderer
         'xml:lang'   => 'en',
       ];
 		
+      // and some handy namespaces to the <html> elements
   		foreach ($attrs as $key => $value) {
   			$view->dom->documentElement->setAttribute($key, $value);
   		}
@@ -39,7 +42,7 @@ class Renderer
   			     'svg'  => 'http://www.w3.org/2000/svg'
   			    ];
     
-      // 1st Loop: Add namespaces. 2nd: move necessary tags to head. 3rd: put javascript on bottom 
+      // Add namespaces to svg and math 
   		foreach ($view->xpath->query('//svg|//math') as $ns_elem) {
   			$ns_elem->setAttribute('xmlns', $ns[$ns_elem->nodeName]);
   		}

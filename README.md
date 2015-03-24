@@ -57,9 +57,9 @@ Part of my motivation in creating this framework is to avoid any/all dependencie
 Still under development, but so far, templates are 100% valid markup and data is supplied via simple tagging with `[@var]`.
 
 ### Syntax
-- the entire node must start with `[` and end with `]` and somewhere inside must contain an alphanumeric key bounded by preceded with the `@` symbol. Remember, an attribute is a node as well, so same rules apply.
+- the entire node must start with `[` and end with `]` and somewhere inside must contain an alphanumeric key preceded with an `@` symbol. Remember, an attribute is a node as well, so same rules apply.
 - if the key does not exist the entire node will be deleted - this is a good thing, as it allows you to avoid the most common bastardization of separating logic from the view, which is peppering your template with conditions to show/hide things based on your data.
-- if you don't want to delete a node because you *might* have data (input example below), make sure your data has that key, but make the value `null`
+- if you don't want to delete a node because you *might* have data (input example below), make sure your data has that key, but make the value `null` or an empty string.
 - While Element or Attribute nodes must begin and end with `[` and `]` respectively, the @key can be anywhere. This allows you to not do extra data parsing (also handy in loops as you will see).
 
 Here is an example:
@@ -69,7 +69,7 @@ Here is an example:
 
     <!-- Given the markup -->
     <p>[My favorite condiment is @condiment and I use it on everything]</p>
-    <input type="text" name="example" value="[@sticky]"/>
+    <input type="text" name="example" value="[@sticky]" id="[@name]"/>
     <p>[Welcome, @name]</p>
 
 ```    
@@ -87,7 +87,7 @@ Here is an example:
     <p>My favorite condiment is sauce and I use it on everything</p>
     <input type="text" name="example" value=""/>
 
-    <!-- note that <p> has been removed because there is no @name varible -->
+    <!-- note that <p> and input#id hav been removed because there is no @name varible -->
 
 ```
 
