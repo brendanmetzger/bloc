@@ -8,7 +8,7 @@ class View
 {
   public $dom, $xpath, $parser, $clone;
   
-  private $renderers = [
+  private static $renderers = [
     'before' => [],
     'after'  => [],
   ];
@@ -53,20 +53,25 @@ class View
     }
   }
   
-  public function addRenderer($when, callable $callback)
+  static public function addRenderer($when, callable $callback)
   {
-    $this->renderers[$when][] = $callback;
+    self::$renderers[$when][] = $callback;
+  }
+  
+  public function getRenderers($key)
+  {
+    return self::$renderers[$key];
   }
   
 	public function render($data = false)
 	{    
-    foreach ($this->renderers['before'] as $callback) {
-      call_user_func($callback);
+    foreach ($this->getRenderers('before') as $callback) {
+      call_user_func($callback, $this);
     }
     
     $this->parser->parse($data ?: new \bloc\model\dictionary);
     
-    foreach ($this->renderers['after'] as $callback) {
+    foreach ($this->getRenderers('after') as $callback) {
       call_user_func($callback, $this);
     }
     

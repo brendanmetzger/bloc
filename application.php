@@ -63,12 +63,12 @@ class Application
     spl_autoload_register([$this, 'failtoload']);
   }
 
-  public function queue($env, $callback)
+  public function prepare($env, $callback)
   {
     $this->_callbacks[$env] = $callback;
   }
 
-  public function run($env)
+  public function execute($env)
   {
     try {
       return call_user_func($this->_callbacks[$env], $this);      

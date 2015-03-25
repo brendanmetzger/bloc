@@ -38,7 +38,7 @@ class Router
     
     try {
       $action  = $this->rigAction($control, $this->request->action ?: $action);
-      $instance = $control->newInstance($this->request, $action->isPublic());
+      $instance = $control->newInstance($this->request, $action->isPublic(), $action->isProtected());
 
       if ( $action->isProtected() ) {
         $action->setAccessible($instance->authenticated);        

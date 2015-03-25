@@ -11,7 +11,7 @@ class Renderer
 {
   
   // This Call
-  public static function HTML()
+  public static function HTML($controller = null)
   {
     return function($view) {
       // move style, meta, and link tags up to the head.
@@ -46,6 +46,14 @@ class Renderer
   		foreach ($view->xpath->query('//svg|//math') as $ns_elem) {
   			$ns_elem->setAttribute('xmlns', $ns[$ns_elem->nodeName]);
   		}
+    };
+  }
+  
+  public static function addPartials($controller) {
+    return function ($view) use ($controller) {
+      foreach ($controller->getPartials() as $property => $path) {
+        $view->{$property} = $path;
+      }
     };
   }
 }
