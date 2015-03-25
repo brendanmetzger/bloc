@@ -8,7 +8,7 @@ namespace bloc;
 
 trait registry {
   
-  private $registry;
+  protected $registry;
   
   public function __set($key, $value)
   {
