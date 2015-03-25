@@ -26,16 +26,6 @@ class Dictionary extends \ArrayIterator
     return is_array($this[$key]) ? new Dictionary($this[$key]) : $this[$key];
   }
   
-  public function current()
-  {
-    $item = parent::current();
-
-    if (is_array($item)) {
-      ksort($item);
-    }
-    return $item;
-  }
-  
   public function hasKey($key)
   {
     return array_key_exists($key, $this);

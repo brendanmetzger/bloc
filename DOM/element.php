@@ -6,8 +6,4 @@ namespace DOM;
 */
 class Element extends \DOMElement
 {
-  public function grab(\DOMNode $node, $where = null)
-  {
-    # code...
-  }
 }

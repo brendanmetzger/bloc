@@ -17,8 +17,6 @@ class Map extends Dictionary
   
   public function current()
   {
-    $item = call_user_func($this->callback, parent::current());
-    ksort($item);
-    return $item;
+    return call_user_func($this->callback, parent::current());
   }
 }
