@@ -32,13 +32,11 @@ class Application
   private $_callbacks = [];
   
   static public function dump() {
-    echo "<pre>--------------\n";
+    echo "\n<pre>--------------\n";
     foreach (func_get_args() as $arg) {
-       echo "\n --- ";
-       print_r($arg);
-       echo " --- \n";
+       printf("\n---\n%s\n---\n", print_r($arg, true));
     }
-    echo "\n--------------</pre>";
+    echo "\n--------------\n</pre>";
   }
 
   static public function error($exception, $level) {
@@ -48,7 +46,6 @@ class Application
       self::dump($exception->getLine());
       self::dump($exception->getFile());
     }
-    
     if ($level > 2) {
       $trace = $exception->getTrace();
       $called = $trace[0];
@@ -72,10 +69,10 @@ class Application
   {
     try {
       return call_user_func($this->_callbacks[$env], $this);      
+    } catch (\RunTimeException $e) {
+      Router::error($e);
     } catch (\LogicException $e) {
       application::error($e, 1);
-    } catch (\RunTimeException $e) {
-      application::error($e, 2);
     } catch (\Exception $e) {
       application::error($e, 3);
     }
@@ -89,6 +86,10 @@ class Application
   public function failtoload($class)
   {
     if (! file_exists(PATH . str_replace(NS, DIRECTORY_SEPARATOR, $class) . '.php')) {
+      $parts = explode(NS, $class);
+      if ($parts[0] == 'controllers') {
+        throw new \RunTimeException("{$parts[1]} is not there.", 404);  
+      }
       throw new \LogicException("What the hell is this '{$class}' file you are referring to?", 1);  
     }
     

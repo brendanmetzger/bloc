@@ -49,7 +49,7 @@ class Renderer
     };
   }
   
-  public static function addPartials($controller) {
+  public static function addPartials(\bloc\controller $controller) {
     return function ($view) use ($controller) {
       foreach ($controller->getPartials() as $property => $path) {
         $view->{$property} = $path;
