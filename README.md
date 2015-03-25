@@ -44,12 +44,34 @@ Create a file with something like this in it, index.php would be a good choice, 
       $router  = new router('controllers', new request($_REQUEST));
       // default controller and action as arguments, in case nothin doin in the request
       $router->delegate('foo', 'bar');
+      
+      // Return a variable if you like
+      return 'done';
     });
 
 
     #4. Run the app. Nothing happens w/o this. Can call different stuff from the queue.
-    $app->run('http-request');
+    $app->run('http-request'); // (this returns 'done')
     
+```
+
+The queue, while perhaps hard to envision, offers a lot of creative opportunity. The idea is to both create applications with as little effort as possible, and have apps that can be completely-rethought at later stages without investing anything upfront. Imagine this example:
+
+```PHP
+    
+    $app->queue('cache-request', function($app) {
+      // look for a cache...
+      
+      return $cache_found_boolean;
+    });
+    
+    $app->queue('regular-request', function($app) {
+      // do the normal stuff.
+    });
+    
+    if (! $app->run('cache-request)) {
+      $app->run('regular-request');
+    }
 ```
   
  

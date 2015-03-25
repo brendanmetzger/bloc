@@ -15,10 +15,7 @@ class View
 	  
   public function __construct($document_element)
   {
-    $this->dom = new \DomDocument('1.0', 'UTF-8');
-    $this->dom->encoding           = 'UTF-8';
-    $this->dom->preserveWhiteSpace = false;
-    $this->dom->formatOutput       = true;
+    $this->dom = new DOM\Document;
         
     if (is_string($document_element)) {
       $this->dom->load(PATH.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
@@ -40,7 +37,6 @@ class View
   public function __set($key, $view)
   {
     $command = "replace {$key}";
-
     if (! $view instanceof view) {
       $view = new view($view);
     }
@@ -48,8 +44,12 @@ class View
     foreach ($this->parser->queryCommentNodes($command) as $stub) {
       $adjacency = trim(substr(trim($stub->nodeValue),strlen($command)));
       $element = $this->dom->importNode($view->dom->documentElement, true);
-      $stub->parentNode->replaceChild($element, $stub->{$adjacency});
-      $stub->parentNode->removeChild($stub);
+      if (empty($adjacency)) {
+        $stub->parentNode->replaceChild($element, $stub);
+      } else {
+        $stub->parentNode->replaceChild($element, $stub->{$adjacency});
+        $stub->parentNode->removeChild($stub);
+      }
     }
   }
   
