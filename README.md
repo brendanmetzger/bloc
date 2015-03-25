@@ -7,7 +7,7 @@ Part of my motivation in creating a framework is an experiment in creating a sim
 
 ### For the computer
 
-- php 5.5 (the current default I believe)
+- php 5.5
 
 ### For the human
 
@@ -204,11 +204,17 @@ This is a nested for loop, so you'll need some hierarchical data, so let's prete
     
     $data = new \bloc\dictionary([
       'calendars => [
-        'month' => 'Jan',
-        'days'  => new \bloc\Map(['m','t','w','t','f','s','s,], function($day) {
-          return ['letter' => $day];
-        }),
-        'date'  => $calendar->daysInJan(), // assume that this returns an array [['date'=>1],['date'=>2]...]
+        [
+          'month' => 'Jan',
+          'days'  => new \bloc\Map(['m','t','w','t','f','s','s,], function($day) {
+            return ['letter' => $day];
+          }),
+          'date'  => $calendar->daysInJan(), // assume that this returns an array [['date'=>1],['date'=>2]...]
+        ],
+        [
+          'month'=> 'Feb',
+          'days' ...
+        ]
       ]
     ]);
     
