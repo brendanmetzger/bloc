@@ -54,7 +54,7 @@ class Parser
   {
     foreach ($data as $datum) {
       $view = new \bloc\view($template);
-      $view->render(new \bloc\model\dictionary($datum));
+      $view->render(new \bloc\types\dictionary($datum));
       $imported_view = $this->view->dom->importNode($view->dom->documentElement, true);
       $placeholder->parentNode->insertBefore($imported_view, $placeholder);
     }

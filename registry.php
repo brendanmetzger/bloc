@@ -19,4 +19,9 @@ trait registry {
   {
     return $this->registry[$key];
   }
+  
+  public function getRegistry()
+  {
+    return new \bloc\types\dictionary($this->registry);
+  }
 }

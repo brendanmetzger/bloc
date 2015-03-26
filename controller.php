@@ -37,4 +37,9 @@ class controller
     session_destroy();
     header("Location: /");
   }
+  
+  public function __invoke()
+  {
+    return $this->getRegistry();
+  }
 }

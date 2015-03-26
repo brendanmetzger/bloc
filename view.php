@@ -69,7 +69,7 @@ class View
       call_user_func($callback, $this);
     }
     
-    $this->parser->parse($data ?: new \bloc\model\dictionary);
+    $this->parser->parse($data ?: new \bloc\types\dictionary);
     
     foreach ($this->getRenderers('after') as $callback) {
       call_user_func($callback, $this);
