@@ -22,6 +22,12 @@ class Router
     $action->invoke($instance, $e->getCode(), $e->getMessage());
   }
   
+  static public function redirect($location_url, $code = 302)
+  {
+    header("Location: {http://{$_SERVER['HTTP_HOST']}{$location_url}}", false, $code);
+    exit();
+  }
+  
   
   public function __construct($namespace, \bloc\request $request = null)
   {

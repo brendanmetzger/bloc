@@ -32,7 +32,7 @@ class controller
     $this->error(501, 'Nothin Doin');
   }
   
-  protected function logout()
+  public function logout()
   {
     session_destroy();
     header("Location: /");
