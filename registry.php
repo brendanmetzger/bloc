@@ -17,6 +17,11 @@ trait registry {
   
   public function __get($key)
   {
+    return $this->getProperty($key);
+  }
+  
+  public function getProperty($key)
+  {
     return $this->registry[$key];
   }
   

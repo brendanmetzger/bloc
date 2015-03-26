@@ -24,7 +24,8 @@ class Router
   
   static public function redirect($location_url, $code = 302)
   {
-    header("Location: {http://{$_SERVER['HTTP_HOST']}{$location_url}}", false, $code);
+    // {http://{$_SERVER['HTTP_HOST']}
+    header("Location: {$location_url}}", false, $code);
     exit();
   }
   
@@ -61,7 +62,7 @@ class Router
       $action->invokeArgs($instance, $this->request->params);
       
     } catch (\ReflectionException $e) {
-      $this->rigAction($control, 'login')->invoke($instance, $_SERVER['REDIRECT_URL'], $_POST);
+      $this->rigAction($control, 'login')->invoke($instance, $_SERVER['REDIRECT_URL'], $this->request);
     }
   }
 }
