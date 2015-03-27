@@ -6,11 +6,12 @@ namespace bloc;
  */
 class View
 {
-  public $dom, $xpath, $parser, $clone;
+  public $dom, $xpath, $parser, $clone, $context = null;
   
-  private static $renderers = [
-    'before' => [],
-    'after'  => [],
+  private static $renderer = [
+    'before'    => [],
+    'after'     => [],
+    'preflight' => [],
   ];
 	  
   public function __construct($document_element)
@@ -55,12 +56,12 @@ class View
   
   static public function addRenderer($when, callable $callback)
   {
-    self::$renderers[$when][] = $callback;
+    self::$renderer[$when][] = $callback;
   }
   
   public function getRenderers($key)
   {
-    return self::$renderers[$key];
+    return self::$renderer[$key];
   }
   
 	public function render($data = false)
@@ -80,6 +81,9 @@ class View
   
   public function __toString()
   {
-    return $this->dom->saveXML();
+    foreach ($this->getRenderers('preflight') as $callback) {
+      call_user_func($callback, $this);
+    }
+    return $this->dom->saveXML($this->context);
   }
 }

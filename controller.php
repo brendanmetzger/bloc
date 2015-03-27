@@ -24,6 +24,10 @@ class controller
   
   public function error($code, $message)
   {
+    /*
+      TODO headers should be passed in a queue somewhere else.. before sending output.
+    */
+    header("HTTP/1.0 404 Not Found");
     printf('%d: %s', $code, $message);
   }
   

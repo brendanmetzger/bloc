@@ -28,8 +28,22 @@ class Document extends \DOMDocument
     
     $this->registerNodeClass('\\DOMElement', 'DOM\\Element');
     
-    if ($data && $flag === self::FILE) {
-      $this->load(PATH."{$data}.xml");
+    if ($data) {
+      switch ($flag) {
+        case self::NODE:
+          $this->appendChild($this->importNode($data, true));
+          break;
+        case self::FILE:
+          $this->load(PATH."{$data}.xml");
+          break;
+        case self::TEXT:
+          $this->loadXML($data);
+          break;
+        default:
+          throw new \InvalidArgumentException("Type not recognized", 1);
+          break;
+      }
     }
   }
+  
 }
