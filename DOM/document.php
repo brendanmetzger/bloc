@@ -26,7 +26,7 @@ class Document extends \DOMDocument
       $this->{$prop} = $value;
     }
     
-    $this->registerNodeClass('\\DOMElement', 'DOM\\Element');
+    $this->registerNodeClass('\\DOMElement', '\\bloc\\DOM\\Element');
     
     if ($data) {
       switch ($flag) {

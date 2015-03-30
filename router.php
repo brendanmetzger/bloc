@@ -59,10 +59,10 @@ class Router
         $action->setAccessible($instance->authenticated);        
       }
       
-      $action->invokeArgs($instance, $this->request->params);
+      return $action->invokeArgs($instance, $this->request->params);
       
     } catch (\ReflectionException $e) {
-      $this->rigAction($control, 'login')->invoke($instance, $_SERVER['REDIRECT_URL'], $this->request);
+      return $this->rigAction($control, 'login')->invoke($instance, $_SERVER['REDIRECT_URL'], $this->request);
     }
   }
 }
