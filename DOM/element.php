@@ -6,4 +6,9 @@ namespace bloc\DOM;
 */
 class Element extends \DOMElement
 {
+  public function insert(\DOMNode $parent)
+  {
+    $parent->appendChild($this);
+    return $this;
+  }
 }

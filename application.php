@@ -11,7 +11,7 @@ define('PATH', realpath('../') . DIRECTORY_SEPARATOR);
 require PATH . 'bloc/router.php';
 require PATH . 'bloc/registry.php';
 require PATH . 'bloc/request.php';
-
+require PATH . 'bloc/controller.php';
 
 /**
  * bloc
@@ -29,8 +29,9 @@ require PATH . 'bloc/request.php';
  
 class Application
 {  
-  private $_callbacks = [];
-  
+  public $benchmark;
+  private $callbacks = [];
+
   static public function dump() {
     echo "\n<pre>--------------\n";
     foreach (func_get_args() as $arg) {
@@ -55,6 +56,7 @@ class Application
   
   public function __construct()
   {
+    $this->benchmark = microtime(true);
     set_include_path(get_include_path() . PATH_SEPARATOR . PATH);
     spl_autoload_register([$this, 'autoload']);
     spl_autoload_register([$this, 'failtoload']);
@@ -62,13 +64,13 @@ class Application
 
   public function prepare($env, $callback)
   {
-    $this->_callbacks[$env] = $callback;
+    $this->callbacks[$env] = $callback;
   }
 
   public function execute($env)
   {
     try {
-      return call_user_func($this->_callbacks[$env], $this);      
+      return call_user_func($this->callbacks[$env], $this);      
     } catch (\RunTimeException $e) {
       Router::error($e);
     } catch (\LogicException $e) {

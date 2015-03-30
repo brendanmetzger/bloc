@@ -243,7 +243,13 @@ For advanced page routing, the framework expects variables like 'controller', 'a
     http://example.com/foo/bar/whatever/you/want
     
 ## Controllers
-Moving on from the immediate example above, you should have a controller class named foo, with a method named bar. Here is what it would probably look like.
+
+### Raison d'être
+To benefit as many use cases as possible (an app could serve different content types, for example) I generally have controllers return some object as opposed to render some output. you can determine what to do with that object (print, send elsewhere, etc) within the `$app->prepare` callback that is responsible for the routing and delegation of this controller.
+
+
+### Example
+Using the 'Usage of a URL' example above, you would have a controller class named foo, with a method named bar. Here is what it would probably look like.
 
 ```PHP
 
@@ -251,9 +257,11 @@ Moving on from the immediate example above, you should have a controller class n
     {
       public function bar($querystring, $params, $exploded)
       {
-        printf('OUTPUT: "%s" "%s" "%s" ', $querystring, $params, $exploded);
-        // OUTPUT "whatever" "you" "need"
+        return srintf('OUTPUT: "%s" "%s" "%s" ', $querystring, $params, $exploded);
+        // returns a string that says  'OUTPUT: "whatever" "you" "need"'
       }
     }
     
-```    
+```
+
+

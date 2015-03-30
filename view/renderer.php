@@ -14,6 +14,7 @@ class Renderer
   public static function HTML($controller = null)
   {
     return function($view) {
+      if (strtolower($view->dom->documentElement->nodeName) != 'html') return;
       // move style, meta, and link tags up to the head.
       foreach ($view->xpath->query('/html/body//style|/html/body//meta|/html/body//link') as $head_node) {
         $view->dom->documentElement->firstChild->appendChild($head_node);
@@ -32,9 +33,10 @@ class Renderer
         'version'    => 'XHTML+RDFa 1.0',
         'xml:lang'   => 'en',
       ];
-		
+      
       // and some handy namespaces to the <html> elements
   		foreach ($attrs as $key => $value) {
+
   			$view->dom->documentElement->setAttribute($key, $value);
   		}
     
