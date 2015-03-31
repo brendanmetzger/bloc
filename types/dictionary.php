@@ -30,12 +30,24 @@ class Dictionary extends \ArrayIterator
   {
     return array_key_exists($key, $this);
   }
-    
-  public function intersection($keys)
-  {
-    return array_intersect_key((array)$this, $keys);
-  }
+      
   
+  public function replaceArrayValues(array $matches)
+  {
+    foreach ($matches as $key => &$match) {
+      $namespaces  = preg_split('/\W+/i',trim($match));
+      $cursor = $this;
+      foreach ($namespaces as $namespace) {
+        if (!array_key_exists($namespace, $cursor)) {
+          throw new \RunTimeException("{$namespace} is unavailable.", 1);
+        }
+        $cursor = $cursor[$namespace];
+      }
+      $match = $cursor;
+    }
+    return $matches;
+  }
+
   # Method(s) I'd maybe like to see:
   // flatten(int $level)
   // serialize
