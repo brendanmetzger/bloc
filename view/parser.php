@@ -15,7 +15,7 @@ class Parser
     $this->view = $view;
   }
   
-  public function parse(\ArrayAccess $data)
+  public function parse($data)
   {
     // cycle through iterators first, looking for <!-- iterate property --> nodes
     foreach ($this->queryCommentNodes('iterate') as $node) {
@@ -23,9 +23,12 @@ class Parser
       $property = trim(substr(trim($node->nodeValue), 7));
 
       try {
-        $this->mapIterator($template, $node, $data->{$property});
+        $match = \bloc\registry::getNamespace($property, $data);
+        $this->mapIterator($template, $node, $match);
       } catch (\RuntimeException $e) {
-       \bloc\application::error($e, 2);
+        if ($e->getCode() < 100) {
+          \bloc\application::error($e, 2);
+        }
       }
     }
     
@@ -51,8 +54,11 @@ class Parser
   private function mapIterator(\DOMNode $template, \DOMNode $placeholder, $data)
   {
     foreach ($data as $datum) {
+      if (! $datum instanceof \bloc\types\XML) {
+        $datum = new \bloc\types\dictionary($datum);
+      }
       $view = new \bloc\view($template);
-      $view->render(new \bloc\types\dictionary($datum));
+      $view->render($datum);
       $imported_view = $this->view->dom->importNode($view->dom->documentElement, true);
       $placeholder->parentNode->insertBefore($imported_view, $placeholder);
     }

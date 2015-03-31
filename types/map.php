@@ -19,6 +19,11 @@ class Map extends Dictionary
     $this->callback = $callback;
   }
   
+  public function offsetGet($offset)
+  {
+    die('here');
+  }
+  
   public function current()
   {
     return call_user_func($this->callback, parent::current());

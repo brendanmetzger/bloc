@@ -64,13 +64,13 @@ class View
     return self::$renderer[$key];
   }
   
-	public function render($data = false)
+	public function render($data = [])
 	{    
     foreach ($this->getRenderers('before') as $callback) {
       call_user_func($callback, $this);
     }
     
-    $this->parser->parse($data ?: new \bloc\types\dictionary);
+    $this->parser->parse($data);
     
     foreach ($this->getRenderers('after') as $callback) {
       call_user_func($callback, $this);
