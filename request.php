@@ -9,9 +9,11 @@ class Request
   use \bloc\registry;
   
   private $params = [];
-  public function __construct($data)
+  public function __construct($data, $parse = true)
   {
-    $data['params'] = array_filter(explode('/', ($data['params'])));
+    if ($parse) {
+      $data['params'] = array_filter(explode('/', ($data['params'])));
+    }
     $this->registry = $data;
   }
   
