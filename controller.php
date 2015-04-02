@@ -6,7 +6,7 @@ namespace bloc;
  * Controller
  */
 
-class controller
+class Controller
 {
   use \bloc\registry;
   
@@ -31,12 +31,12 @@ class controller
     printf('%d: %s', $code, $message);
   }
   
-  public function login($redirect_url, $post_data)
+  public function GETlogin($redirect)
   {
     $this->error(501, 'Nothin Doin');
   }
   
-  public function logout()
+  public function GETlogout()
   {
     session_destroy();
     header("Location: /");

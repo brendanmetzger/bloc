@@ -15,22 +15,13 @@ require PATH . 'bloc/controller.php';
 
 /**
  * bloc
- *
- * LICENSE
- *
- * This source file and all files under the bloc namespace are subject 
- * to the license that is bundled with this package in the file LICENSE
- *
- * Application Whizbang
- *
- * @category bloc
- * @copyright Copyright (c) 2008-present, Brendan Metzger <brendan.metzger@gmail.com>
+ * Copyright (c) 2008-present, Brendan Metzger <brendan.metzger@gmail.com>
  */
  
 class Application
 {  
   public $benchmark;
-  private $callbacks = [];
+  private $callbacks = [], $config = [];
 
   static public function dump() {
     echo "\n<pre>--------------\n";
@@ -42,19 +33,34 @@ class Application
 
   static public function error($exception, $level) {
     self::dump($exception->getMessage());
-    
     if ($level > 1) {
-      self::dump($exception->getLine());
-      self::dump($exception->getFile());
+      self::dump($exception->getLine(), $exception->getFile());
     }
     if ($level > 2) {
-      $trace = $exception->getTrace();
-      $called = $trace[0];
+      $called = $exception->getTrace()[0];
       self::dump("problem in {$called['function']} - line {$called['line']} in {$called['file']}");
     }
   }
   
-  public function __construct()
+  static public function session($name, array $data = [])
+  {
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+      session_name($name);
+      session_start();
+    } else {
+      // if we are setting a session again, login has been attempted and we will regenerate id
+      session_regenerate_id();
+    }
+    
+    if (!empty($data)) {
+      foreach ($data as $key => $value) {
+        $_SESSION[$key] = $value;
+      }
+    }
+    return $_SESSION;
+  }
+  
+  public function __construct($config = [])
   {
     $this->benchmark = microtime(true);
     set_include_path(get_include_path() . PATH_SEPARATOR . PATH);
@@ -94,6 +100,5 @@ class Application
       }
       throw new \LogicException("What the hell is this '{$class}' file you are referring to?", 1);  
     }
-    
   }
 }

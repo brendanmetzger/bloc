@@ -25,7 +25,7 @@ class Router
   static public function redirect($location_url, $code = 302)
   {
     // {http://{$_SERVER['HTTP_HOST']}
-    header("Location: {$location_url}}", false, $code);
+    header("Location: {$location_url}", false, $code);
     exit();
   }
   
@@ -39,30 +39,40 @@ class Router
   # Returns a http://php.net/reflectionmethod
   private function rigAction(\ReflectionClass $control, $action)
   {    
-    if ( $control->hasMethod($action) ) {
-      return $control->getMethod($action);
+    $method = $this->request->type . $action;
+    if ( $control->hasMethod($method) ) {
+      return $control->getMethod($method);
     } else {
-      throw new \RuntimeException(sprintf('Could not find %s', $action), 404);
+      throw new \RuntimeException(sprintf("Unable to %s '%s'", strtolower($this->request->type), $action), 404);
     }
   }
 
   public function delegate($controller, $action)
   {
-    $controller = $this->namespace . ($this->request->controller ?: $controller);
-    $control    = new \ReflectionClass($controller);
+    $class_name     = $this->namespace . ($this->request->controller ?: $controller);
+    $controller     = new \ReflectionClass($class_name);
+    $request_method = $this->request->type;
     
     try {
-      $action  = $this->rigAction($control, $this->request->action ?: $action);
-      $instance = $control->newInstance($this->request);
-      
+      $action  = $this->rigAction($controller, $this->request->action ?: $action);
+      $instance = $controller->newInstance($this->request);
+
       if ( $action->isProtected() ) {
         $action->setAccessible($instance->authenticated);        
       }
       
-      return $action->invokeArgs($instance, $this->request->params);
+      if ($request_method === "GET") {
+        return $action->invokeArgs($instance, $this->request->params);
+      }
+      
+      if ($request_method === "POST") {
+        return $action->invoke($instance, $this->request);
+      }
+      
+      
       
     } catch (\ReflectionException $e) {
-      return $this->rigAction($control, 'login')->invoke($instance, $_SERVER['REDIRECT_URL'], $this->request);
+      return $this->rigAction($controller, 'login')->invoke($instance, $this->request->redirect);
     }
   }
 }
