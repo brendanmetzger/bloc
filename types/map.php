@@ -18,14 +18,10 @@ class Map extends Dictionary
     parent::__construct($array);
     $this->callback = $callback;
   }
-  
-  public function offsetGet($offset)
-  {
-    die('here');
-  }
-  
+    
   public function current()
   {
     return call_user_func($this->callback, parent::current());
   }
+  
 }

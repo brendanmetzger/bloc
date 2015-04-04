@@ -1,5 +1,4 @@
 <?php
-
 namespace bloc;
 
 # shorthand for namespace separator ( \ )
@@ -17,28 +16,27 @@ require PATH . 'bloc/controller.php';
  * bloc
  * Copyright (c) 2008-present, Brendan Metzger <brendan.metzger@gmail.com>
  */
- 
 class Application
 {  
   public $benchmark;
   private $callbacks = [], $config = [];
+  private static $log = [];
 
-  static public function dump() {
-    echo "\n<pre>--------------\n";
+  static public function log() {
     foreach (func_get_args() as $arg) {
-       printf("\n---\n%s\n---\n", print_r($arg, true));
+       self::$log[] = print_r($arg, true);
     }
-    echo "\n--------------\n</pre>";
+    return self::$log;
   }
 
   static public function error($exception, $level) {
-    self::dump($exception->getMessage());
+    print_r($exception->getMessage());
     if ($level > 1) {
-      self::dump($exception->getLine(), $exception->getFile());
+      print_r($exception->getLine(), $exception->getFile());
     }
     if ($level > 2) {
       $called = $exception->getTrace()[0];
-      self::dump("problem in {$called['function']} - line {$called['line']} in {$called['file']}");
+      echo "Problem in {$called['function']} - line {$called['line']} in {$called['file']}";
     }
   }
   

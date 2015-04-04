@@ -60,16 +60,13 @@ class Router
       if ( $action->isProtected() ) {
         $action->setAccessible($instance->authenticated);        
       }
-      
-      if ($request_method === "GET") {
-        return $action->invokeArgs($instance, $this->request->params);
-      }
+      $params = $this->request->params;
       
       if ($request_method === "POST") {
-        return $action->invoke($instance, $this->request);
+        array_unshift($params, $this->request);
       }
       
-      
+      return $action->invokeArgs($instance, $params);
       
     } catch (\ReflectionException $e) {
       return $this->rigAction($controller, 'login')->invoke($instance, $this->request->redirect);

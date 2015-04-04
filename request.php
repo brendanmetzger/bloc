@@ -10,10 +10,13 @@ class Request
   
   private $params = [];
   public $type, $redirect;
+  
+  static public $HTTP = true;
+  
   public function __construct($data, $parse = true)
   {
-    $this->type     = $_SERVER['REQUEST_METHOD'];
-    $this->redirect = $_SERVER['REDIRECT_URL'];
+    $this->type     = self::$HTTP ? $_SERVER['REQUEST_METHOD'] : 'CLI';
+    $this->redirect = self::$HTTP ? $_SERVER['REDIRECT_URL'] : false;
     
     if ($parse) {
       $data['params'] = array_filter(explode('/', ($data['params'])));
