@@ -3,6 +3,7 @@ namespace bloc\types;
 
 class XML extends \SimpleXMLElement implements \ArrayAccess
 {
+
   public function replaceArrayValues(array $matches)
   {
     foreach ($matches as $key => &$match) {

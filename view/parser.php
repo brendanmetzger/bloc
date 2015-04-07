@@ -34,10 +34,10 @@ class Parser
     
     foreach ($this->getSlugs() as $template) {      
       try {
-        // this is the string to be operated on "something with @variable in it", trimmed of '[]';
+        // this is the string to be operated on "something with $variable in it", trimmed of '[]';
         $slug = substr($template->nodeValue, 1,-1);
-        // matche alpha numeric strings prefixed with @ - : is namespace operator in this case 
-        preg_match_all('/\@([a-z\_\:0-9]+)\b/i', $slug, $matches);
+        // matche alpha numeric strings prefixed with $ - : is namespace operator in this case 
+        preg_match_all('/\$([\@a-z\_\:0-9]+)\b/i', $slug, $matches);
         // Dictionary has a match method that will swap out real data based on the namespace requested
         $replacements = $data->replaceArrayValues(array_combine($matches[0], $matches[1]));
         // using slug, swapout nodevalue with replacements from above
@@ -80,7 +80,7 @@ class Parser
     # if starts with the open placeholder
     $exp .= "substring(.,1,1) = '[' and ";
     # and contains the variable symbole key
-    $exp .= "contains(., '@') and ";
+    $exp .= "contains(., '\$') and ";
     # and ends with the close placeholder
     $exp .= "substring(., string-length(.), 1) = ']' and ";
     # and does not contain any other nodes
@@ -90,7 +90,7 @@ class Parser
     # if it starts with the open placeholder
     $exp .= "substring(.,1,1) = '[' and ";
     # and it contains the variable symbol key
-    $exp .= "contains(., '@') and ";
+    $exp .= "contains(., '\$') and ";
     # and ends with the close placeholder
     $exp .= "substring(., string-length(.), 1) = ']']";
     

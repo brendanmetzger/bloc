@@ -11,4 +11,10 @@ class Element extends \DOMElement
     $parent->appendChild($this);
     return $this;
   }
+  
+  public function grab(\DOMNode $child, $where = null)
+  {
+    $this->appendChild($this);
+    return $this;
+  }
 }
