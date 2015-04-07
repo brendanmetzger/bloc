@@ -19,28 +19,9 @@ require PATH . 'bloc/controller.php';
 class Application
 {  
   public $benchmark;
-  private $callbacks = [], $config = [];
-  private static $log = [];
-
-  static public function log() {
-    foreach (func_get_args() as $arg) {
-       self::$log[] = print_r($arg, true);
-    }
-    return self::$log;
-  }
-
-  static public function error($exception, $level) {
-    print_r($exception->getMessage());
-    if ($level > 1) {
-      print_r($exception->getLine(), $exception->getFile());
-    }
-    if ($level > 2) {
-      $called = $exception->getTrace()[0];
-      echo "Problem in {$called['function']} - line {$called['line']} in {$called['file']}";
-    }
-  }
+  private $callbacks = [], $config = [], $log = [];
   
-  static public function session($name, array $data = [])
+  public function session($name, array $data = [])
   {
     if (session_status() !== PHP_SESSION_ACTIVE) {
       session_name($name);
@@ -58,13 +39,31 @@ class Application
     return $_SESSION;
   }
   
-  public function __construct($config = [])
+  static public function instance($config = [])
+  {
+    static $instance = null;
+    
+    if ($instance === null) {
+      $instance = new static($config);
+    }
+
+    return $instance;
+  }
+  
+  private function __construct($config)
   {
     $this->benchmark = microtime(true);
     set_include_path(get_include_path() . PATH_SEPARATOR . PATH);
     spl_autoload_register([$this, 'autoload']);
     spl_autoload_register([$this, 'vendor']);
     spl_autoload_register([$this, 'failtoload']);
+  }
+  
+  public function log() {
+    foreach (func_get_args() as $arg) {
+       $this->log[] = $arg;
+    }
+    return $this->log;
   }
 
   public function prepare($env, $callback)
@@ -78,10 +77,8 @@ class Application
       return call_user_func($this->callbacks[$env], $this);      
     } catch (\RunTimeException $e) {
       Router::error($e);
-    } catch (\LogicException $e) {
-      application::error($e, 1);
     } catch (\Exception $e) {
-      application::error($e, 3);
+      $this->log($e);
     }
   }
 

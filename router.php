@@ -24,8 +24,8 @@ class Router
   
   static public function redirect($location_url, $code = 302)
   {
-    // {http://{$_SERVER['HTTP_HOST']}
-    header("Location: {$location_url}", false, $code);
+    $location = "Location: http://{$_SERVER['HTTP_HOST']}{$location_url}";
+    header($location, false, $code);
     exit();
   }
   
@@ -56,10 +56,12 @@ class Router
     try {
       $action  = $this->rigAction($controller, $this->request->action ?: $action);
       $instance = $controller->newInstance($this->request);
-
+      
       if ( $action->isProtected() ) {
+
         $action->setAccessible($instance->authenticated);        
       }
+
       $params = $this->request->params;
       
       if ($request_method === "POST") {

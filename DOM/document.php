@@ -34,7 +34,7 @@ class Document extends \DOMDocument
           $this->appendChild($this->importNode($data, true));
           break;
         case self::FILE:
-          $this->load(PATH."{$data}.xml" , LIBXML_NOENT);
+          $this->load(PATH."{$data}.xml" , LIBXML_NOENT|LIBXML_COMPACT);
           break;
         case self::TEXT:
           $this->loadXML($data);

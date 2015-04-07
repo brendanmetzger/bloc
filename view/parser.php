@@ -27,7 +27,7 @@ class Parser
         $this->mapIterator($template, $node, $match);
       } catch (\RuntimeException $e) {
         if ($e->getCode() < 100) {
-          \bloc\application::error($e, 2);
+          \bloc\application::instance()->log($e);
         }
       }
     }
