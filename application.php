@@ -63,6 +63,7 @@ class Application
     $this->benchmark = microtime(true);
     set_include_path(get_include_path() . PATH_SEPARATOR . PATH);
     spl_autoload_register([$this, 'autoload']);
+    spl_autoload_register([$this, 'vendor']);
     spl_autoload_register([$this, 'failtoload']);
   }
 
@@ -87,6 +88,11 @@ class Application
   private function autoload($class)
   { 
     @include str_replace(NS, DIRECTORY_SEPARATOR, $class) . '.php';
+  }
+  
+  public function vendor($class)
+  {
+    @include PATH . 'vendor' . DIRECTORY_SEPARATOR . str_replace(NS, DIRECTORY_SEPARATOR, $class) . '.php';
   }
 
   public function failtoload($class)
