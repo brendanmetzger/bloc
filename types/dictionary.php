@@ -35,7 +35,7 @@ class Dictionary extends \ArrayIterator
   public function replaceArrayValues(array $matches)
   {
     foreach ($matches as $key => &$match) {
-      $match = \bloc\registry::getNamespace($match, $this);
+      $match = htmlentities(\bloc\registry::getNamespace($match, $this), ENT_COMPAT|ENT_XML1, 'UTF-8', false);
     }
     return $matches;
   }
