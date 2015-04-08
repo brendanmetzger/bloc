@@ -71,10 +71,10 @@ class Application
     $this->callbacks[$env] = $callback;
   }
 
-  public function execute($env)
+  public function execute($env, $param = null)
   {
     try {
-      return call_user_func($this->callbacks[$env], $this);      
+      return call_user_func($this->callbacks[$env], $this, $param);      
     } catch (\RunTimeException $e) {
       Router::error($e);
     } catch (\Exception $e) {

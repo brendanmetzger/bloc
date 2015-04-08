@@ -3,7 +3,14 @@ namespace bloc\types;
 
 class XML extends \SimpleXMLElement implements \ArrayAccess
 {
-
+  static public function MAP($iterator, $callback)
+  {
+    foreach ($iterator as $item) {
+      \bloc\application::instance()->log($item);
+    }
+    
+  }
+  
   public function replaceArrayValues(array $matches)
   {
     foreach ($matches as $key => &$match) {
@@ -30,6 +37,12 @@ class XML extends \SimpleXMLElement implements \ArrayAccess
   public function offsetUnset($offset)
   {
     unset($this->{$offset});
+  }
+  
+  public function current()
+  {
+    \bloc\application::instance()->log('and we here');
+    return parent::current();
   }
   
 }
