@@ -10,6 +10,9 @@ trait registry {
   
   protected $registry;
   
+  /*
+    TODO Consider a recursive function here instead of a loop
+  */
   public static function getNamespace($path, \ArrayAccess $cursor) {
     $namespaces  = preg_split('/\:+/i',trim($path));
     
@@ -20,7 +23,7 @@ trait registry {
       } 
       
       
-      if (!array_key_exists($namespace, $cursor)) {
+      if (!$cursor || !array_key_exists($namespace, $cursor)) {
         throw new \RunTimeException("{$namespace} is unavailable.", 100);
       }
       
