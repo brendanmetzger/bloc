@@ -1,13 +1,20 @@
 <?php
 namespace bloc\types;
 
-class XML extends \SimpleXMLElement implements \ArrayAccess
+class XML extends \SimpleXMLIterator implements \ArrayAccess
 {
-  static public function MAP($iterator, $callback)
+  static public function load($file, $compressed = false)
   {
-    foreach ($iterator as $item) {
-      \bloc\application::instance()->log($item);
+    static $instance = [];
+
+    if (! array_key_exists($file, $instance)) {
+      if ($compressed) {
+        $instance[$file] = simplexml_load_string(gzdecode(file_get_contents(PATH.$file)), __CLASS__, LIBXML_COMPACT);;
+      } else {
+        $instance[$file] = simplexml_load_string(file_get_contents(PATH.$file.'.xml'), __CLASS__, LIBXML_COMPACT);;
+      }
     }
+    return $instance[$file];
     
   }
   
