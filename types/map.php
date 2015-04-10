@@ -14,7 +14,7 @@ trait Map
   public function map(callable $callback)
   {
     $this->obj_id = spl_object_hash($this);
-    $this::$callbacks[(string)$this->obj_id] = $callback;
+    self::$callbacks[(string)$this->obj_id] = $callback;
     return $this;
   }
     
