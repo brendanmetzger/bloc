@@ -37,7 +37,7 @@ trait registry {
   
   public function __set($key, $value)
   {
-    return $this->registry[$key] = $value;
+    return $this->setProperty($key, $value);
   }
   
   public function __get($key)
@@ -47,6 +47,12 @@ trait registry {
   
   public function getProperty($key)
   {
+    return $this->registry[$key];
+  }
+  
+  public function &setProperty($key, $value)
+  {
+    $this->registry[$key] = $value;
     return $this->registry[$key];
   }
   

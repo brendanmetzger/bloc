@@ -32,4 +32,18 @@ class Dictionary extends \ArrayIterator
   {
     return array_key_exists($key, $this);
   }
+  
+  public function limit($index = 0, $limit = 100, array &$paginate = [])
+  {
+    $start = ($index * $limit);
+    if ($this->count() > $start ) {
+      $paginate['next'] = $index+1;
+    }
+    
+    if ($index > 0 && $this->count() > $limit) {
+      $paginate['previous'] = $index-1;
+    }
+    
+    return new \LimitIterator($this, $start, $limit);
+  }
 }
