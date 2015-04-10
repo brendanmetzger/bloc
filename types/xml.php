@@ -3,6 +3,7 @@ namespace bloc\types;
 
 class XML extends \SimpleXMLIterator implements \ArrayAccess
 {
+  private static $callback = null;
   static public function load($file, $compressed = false)
   {
     static $instance = [];
@@ -15,9 +16,23 @@ class XML extends \SimpleXMLIterator implements \ArrayAccess
       }
     }
     return $instance[$file];
-    
   }
   
+  public function map(callable $callback)
+  {
+    self::$callback = $callback;
+  }
+  
+  public function findOne($path, $offset = 0)
+  {
+    return $this->find($path)[$offset];
+  }
+  
+  public function find($path)
+  {
+    return $this->xpath($path);
+  }
+    
   public function replaceArrayValues(array $matches)
   {
     foreach ($matches as $key => &$match) {
@@ -25,6 +40,7 @@ class XML extends \SimpleXMLIterator implements \ArrayAccess
     }
     return $matches;
   }
+  
   
   public function offsetExists($offset)
   {
@@ -48,7 +64,9 @@ class XML extends \SimpleXMLIterator implements \ArrayAccess
   
   public function current()
   {
-    \bloc\application::instance()->log('and we here');
+    if (self::$callback) {
+      return call_user_func(self::$callback, parent::current());
+    }
     return parent::current();
   }
   
