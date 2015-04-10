@@ -8,6 +8,8 @@ namespace bloc\types;
 
 class Dictionary extends \ArrayIterator
 {  
+  use Map;
+  
   function __construct($data = [])
   {
     parent::__construct($data);
@@ -30,17 +32,4 @@ class Dictionary extends \ArrayIterator
   {
     return array_key_exists($key, $this);
   }
-
-  
-  public function replaceArrayValues(array $matches)
-  {
-    foreach ($matches as $key => &$match) {
-      $match = htmlentities(\bloc\registry::getNamespace($match, $this), ENT_COMPAT|ENT_XML1, 'UTF-8', false);
-    }
-    return $matches;
-  }
-
-  # Method(s) I'd maybe like to see:
-  // flatten(int $level)
-  // serialize
 }
