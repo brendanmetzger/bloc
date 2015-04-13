@@ -14,13 +14,6 @@ class Router
   public $request;
   private $namespace;
   
-  static public function error(\Exception $e)
-  {
-    $control = new \ReflectionClass('\\bloc\controller');
-    $instance = $control->newInstance();
-    $action   = $control->getMethod('error');
-    $action->invoke($instance, $e->getCode(), $e->getMessage());
-  }
   
   static public function redirect($location_url, $code = 302)
   {
@@ -46,15 +39,15 @@ class Router
       throw new \RuntimeException(sprintf("Unable to %s '%s'", strtolower($this->request->type), $action), 404);
     }
   }
-
-  public function delegate($controller, $action)
+  
+  public function delegate($default_controller, $default_action)
   {
-    $class_name     = $this->namespace . ($this->request->controller ?: $controller);
+    $class_name     = $this->namespace . ($this->request->controller ?: $default_controller);
     $controller     = new \ReflectionClass($class_name);
     $request_method = $this->request->type;
     
     try {
-      $action  = $this->rigAction($controller, $this->request->action ?: $action);
+      $action  = $this->rigAction($controller, $this->request->action ?: $default_action);
       $instance = $controller->newInstance($this->request);
       
       if ( $action->isProtected() ) {
@@ -72,6 +65,10 @@ class Router
     } catch (\ReflectionException $e) {
 
       return $this->rigAction($controller, 'login')->invoke($instance, $this->request->redirect);
+    } catch (\RunTimeException $e) {
+      $error_controller = new \ReflectionClass($this->namespace . $default_controller);
+      $instance = $error_controller->newInstance($this->request);
+      return $this->rigAction($error_controller, 'error')->invoke($instance, $e->getCode(), $e->getMessage());
     }
   }
 }

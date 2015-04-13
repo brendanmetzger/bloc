@@ -84,10 +84,8 @@ class Application
   {
     try {
       return call_user_func($this->callbacks[$env], $this, $param);      
-    } catch (\RunTimeException $e) {
-      Router::error($e);
     } catch (\Exception $e) {
-      $this->log($e);
+      print_r($e);
     }
   }
 
