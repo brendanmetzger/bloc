@@ -58,7 +58,6 @@ class Router
       $instance = $controller->newInstance($this->request);
       
       if ( $action->isProtected() ) {
-
         $action->setAccessible($instance->authenticated);        
       }
 
@@ -71,6 +70,7 @@ class Router
       return $action->invokeArgs($instance, $params);
       
     } catch (\ReflectionException $e) {
+
       return $this->rigAction($controller, 'login')->invoke($instance, $this->request->redirect);
     }
   }

@@ -23,7 +23,7 @@ class View
     } else if ($document_element instanceof \DOMNode) {
       $this->dom->appendChild($this->dom->importNode($document_element, true));
     }
-    
+        
     $this->xpath  = new \DomXpath($this->dom);
     $this->parser = new view\parser($this);
     
@@ -76,6 +76,7 @@ class View
       call_user_func($callback, $this);
     }
     
+
     return $this;
 	}
   
