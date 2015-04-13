@@ -17,20 +17,24 @@ class Dictionary extends \ArrayIterator
   
   public function __set($key, $value)
   {
-    $this[$key] = $value;
+    $this->offsetSet($key, $value);
   }
   
   public function __get($key)
   {
-    if (!$this->hasKey($key)) {
-      return [];
-    }
-    return is_array($this[$key]) ? new Dictionary($this[$key]) : $this[$key];
+    return $this->offsetGet($key);
   }
   
-  public function hasKey($key)
+
+  
+  public function offsetGet($offset)
   {
-    return array_key_exists($key, $this);
+    if (!$this->offsetExists($offset)) {
+      throw new \RunTimeException("{$offset} is unavailable.", 100); 
+    }
+    
+    $data = parent::offsetGet($offset);
+    return is_array($data) ? new Dictionary($data) : $data;
   }
   
   public function limit($index = 0, $limit = 100, array &$paginate = [])
@@ -46,4 +50,5 @@ class Dictionary extends \ArrayIterator
     
     return new \LimitIterator($this, $start, $limit);
   }
+  
 }

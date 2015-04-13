@@ -19,7 +19,7 @@ require PATH . 'bloc/controller.php';
 class Application
 {  
   public $benchmark;
-  private $callbacks = [], $config = [], $log = [];
+  private $callbacks = [], $config = [], $log = [], $exchanges = ['request' => null, 'response' => 'null'];
   
   public function session($name, array $data = [])
   {
@@ -30,7 +30,6 @@ class Application
       // if we are setting a session again, login has been attempted and we will regenerate id
       session_regenerate_id();
     }
-    
     if (!empty($data)) {
       foreach ($data as $key => $value) {
         $_SESSION[$key] = $value;
@@ -46,7 +45,6 @@ class Application
     if ($instance === null) {
       $instance = new static($config);
     }
-
     return $instance;
   }
   
@@ -57,6 +55,17 @@ class Application
     spl_autoload_register([$this, 'autoload']);
     spl_autoload_register([$this, 'vendor']);
     spl_autoload_register([$this, 'failtoload']);
+  }
+  
+  public function getExchange($key)
+  {
+    return $this->exchanges[$key];
+  }
+  
+  public function setExchanges(Request $request, Response $response)
+  {
+    $this->exchanges['request']  = $request;
+    $this->exchanges['response'] = $response;
   }
   
   public function log() {

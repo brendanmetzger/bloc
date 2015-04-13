@@ -17,20 +17,7 @@ trait registry {
     $namespaces  = preg_split('/\:+/i',trim($path));
     
     foreach ($namespaces as $namespace) {
-      if (substr($namespace, 0, 1) == '@') {
-        $cursor = $cursor[substr($namespace, 1)];
-        continue;
-      } 
-      
-      
-      if (!$cursor || !array_key_exists($namespace, $cursor)) {
-        throw new \RunTimeException("{$namespace} is unavailable.", 100);
-      }
-      
-
-      
-      $cursor = is_array($cursor) ? $cursor[$namespace] : $cursor->{$namespace};
-      
+      $cursor = $cursor->offsetGet($namespace);
     }
     return $cursor;
   }

@@ -31,14 +31,31 @@ class XML extends \SimpleXMLIterator implements \ArrayAccess
     return new Dictionary($this->xpath($path));
   }
       
-  public function offsetExists($offset)
+  public function offsetExists($offset, $attribute = false)
   {
-    return property_exists($offset, $this);
+    if ($attribute) {
+      return ! is_null($this[$offset]);
+    } else {
+      return ! is_null($this->{$offset});
+    }
+    
   }
   
   public function offsetGet($offset)
   {
-    return $this->{$offset};
+
+    if (substr($offset, 0, 1) == '@') {
+      $attribute = true;
+      $offset = substr($offset, 1);
+    } else {
+      $attribute = false;
+    } 
+    
+    if (! $this->offsetExists($offset, $attribute)) {
+      throw new \RunTimeException("{$offset} is unavailable.", 100);
+    }
+    
+    return $attribute ? $this[$offset] : $this->{$offset};
   }
   
   public function offsetSet($property, $value)

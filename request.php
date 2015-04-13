@@ -9,7 +9,7 @@ class Request
   use \bloc\registry;
   
   private $params = [];
-  public $type, $redirect;
+  public $type, $redirect, $format;
   
   static public $HTTP = true;
   
@@ -17,6 +17,7 @@ class Request
   {
     $this->type     = self::$HTTP ? $_SERVER['REQUEST_METHOD'] : 'CLI';
     $this->redirect = self::$HTTP ? $_SERVER['REDIRECT_URL'] : false;
+    $this->format   = $data['content-type'] ?: 'html'; 
     
     if ($parse) {
       $data['params'] = array_filter(explode('/', ($data['params'])));

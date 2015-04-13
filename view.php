@@ -11,7 +11,6 @@ class View
   private static $renderer = [
     'before'    => [],
     'after'     => [],
-    'preflight' => [],
   ];
 	  
   public function __construct($document_element)
@@ -82,9 +81,6 @@ class View
   
   public function __toString()
   {
-    foreach ($this->getRenderers('preflight') as $callback) {
-      call_user_func($callback, $this);
-    }
     return $this->dom->saveXML($this->context);
   }
 }
