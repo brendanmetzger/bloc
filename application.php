@@ -27,13 +27,10 @@ class Application
       session_name($name);
       session_start();
     } else {
-      // if we are setting a session again, login has been attempted and we will regenerate id
       session_regenerate_id();
     }
-    if (!empty($data)) {
-      foreach ($data as $key => $value) {
-        $_SESSION[$key] = $value;
-      }
+    foreach ($data as $key => $value) {
+      $_SESSION[$key] = $value;
     }
     return $_SESSION;
   }
