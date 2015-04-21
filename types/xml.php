@@ -22,7 +22,6 @@ class XML extends \SimpleXMLIterator implements \ArrayAccess
   public function findOne($path, $offset = 0)
   {
     $result = $this->find($path);
-    
     return count($result) > 0 ? $result[$offset] : null;
   }
   

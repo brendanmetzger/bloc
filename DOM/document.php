@@ -11,13 +11,14 @@ class Document extends \DOMDocument
   const FILE = 1;
   const TEXT = 2;
   
-  private $options = [
-    'encoding' => 'UTF-8',
-    'preserveWhiteSpace' => false,
-    'validateOnParse' => false,
-    'formatOutput' => true,
-  ];
-     
+  private $xpath = null,
+          $options = [
+            'encoding' => 'UTF-8',
+            'preserveWhiteSpace' => false,
+            'validateOnParse' => false,
+            'formatOutput' => true,
+          ];
+  
   function __construct($data = false, $options = [], $flag = 1)
   {
     parent::__construct('1.0', 'UTF-8');
@@ -46,4 +47,16 @@ class Document extends \DOMDocument
     }
   }
   
+  public function find($expression, $context = null)
+  {
+    if ($this->xpath === null) {
+      $this->xpath = new \DOMXpath($this);
+    }
+    return $this->xpath->query($expression, $context ?: $this->documentElement);
+  }
+  
+  public function pick($expression, $offset = 0)
+  {
+    return $this->find($expression)->item($offset);
+  }
 }
