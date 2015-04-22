@@ -54,8 +54,8 @@ class Parser
   private function mapIterator(\DOMNode $template, \DOMNode $placeholder, $data)
   {
     foreach ($data as $datum) {
-      if (! $datum instanceof \bloc\types\XML) {
-        $datum = new \bloc\types\dictionary($datum);
+      if (! $datum instanceof \DOMNode) {
+        $datum = new \bloc\types\dictionary($datum);  
       }
       $view = new \bloc\view($template);
       $view->render($datum);

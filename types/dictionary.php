@@ -12,7 +12,12 @@ class Dictionary extends \ArrayIterator
   
   function __construct($data = [])
   {
-    parent::__construct($data);
+    if (is_array($data) || is_object($data)) {
+      parent::__construct($data);
+    } else {
+      print_r($data);
+    }
+
   }
   
   public function __set($key, $value)

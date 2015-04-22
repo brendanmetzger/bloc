@@ -17,6 +17,10 @@ trait registry {
     $namespaces  = preg_split('/\:+/i',trim($path));
     
     foreach ($namespaces as $namespace) {
+      if (!method_exists($cursor, 'offsetGet')) {
+        print_r($cursor);
+        return;
+      }
       $cursor = $cursor->offsetGet($namespace);
     }
     return $cursor;

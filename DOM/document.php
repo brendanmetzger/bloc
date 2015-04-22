@@ -18,6 +18,7 @@ class Document extends \DOMDocument
             'validateOnParse' => false,
             'formatOutput' => true,
           ];
+
   
   function __construct($data = false, $options = [], $flag = 1)
   {
@@ -52,9 +53,9 @@ class Document extends \DOMDocument
     if ($this->xpath === null) {
       $this->xpath = new \DOMXpath($this);
     }
-    return $this->xpath->query($expression, $context ?: $this->documentElement);
+    return new NodeIterator($this->xpath->query($expression, $context ?: $this->documentElement));
   }
-  
+    
   public function pick($expression, $offset = 0)
   {
     return $this->find($expression)->item($offset);

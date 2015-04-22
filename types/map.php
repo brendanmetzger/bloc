@@ -9,21 +9,23 @@ namespace bloc\types;
 
 trait Map
 {
-  private static $callbacks = [];
-  private $obj_id = null;
+  protected $callback = null;
+
   public function map(callable $callback)
   {
-    $this->obj_id = spl_object_hash($this);
-    self::$callbacks[(string)$this->obj_id] = $callback;
+    
+    $this->callback = $callback;
     return $this;
   }
     
   public function current()
   {
-    if ($this->obj_id) {
-      return call_user_func(self::$callbacks[(string)$this->obj_id], parent::current());
+    $object = parent::current();
+    
+    if ($this->callback) {
+      return call_user_func($this->callback, $object);
     }
-    return parent::current();
+    return $object;
   }
   
   public function replaceArrayValues(array $matches)
