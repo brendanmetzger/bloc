@@ -17,4 +17,10 @@ class Element extends \DOMElement
     $this->appendChild($this);
     return $this;
   }
+  
+  public function getFirst($nodeName)
+  {
+    $result = $this->getElementsByTagName($nodeName);
+    return $result->length > 0 ? $result->item(0) : null;
+  }
 }
