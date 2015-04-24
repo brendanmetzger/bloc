@@ -71,13 +71,19 @@ namespace bloc\DOM;
     public function limit($index = 0, $limit = 100, array &$paginate = [])
     {
       $start = ($index * $limit);
-      if ($this->nodelist->length > $start ) {
+      $total = $this->nodelist->length;
+      $paginate['total'] = ceil($total/$limit) - 1;
+      
+      if ($paginate['total'] > $index) {
         $paginate['next'] = $index+1;
       }
     
-      if ($index > 0 && $this->nodelist->length > $limit) {
+      if ($index > 1 && $total > $limit) {
         $paginate['previous'] = $index-1;
       }
+      
+      $paginate['index'] = $index;
+      $paginate['total'] = ceil($total/$limit) - 1;
     
       return new \LimitIterator($this, $start, $limit);
     }
