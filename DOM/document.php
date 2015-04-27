@@ -22,6 +22,7 @@ class Document extends \DOMDocument
   
   function __construct($data = false, $options = [], $flag = 1)
   {
+    libxml_use_internal_errors(true);
     parent::__construct('1.0', 'UTF-8');
     
     foreach (array_merge($this->options, $options) as $prop => $value) {

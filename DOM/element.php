@@ -44,8 +44,13 @@ class Element extends \DOMElement implements \ArrayAccess
     if (substr($offset, 0,1) === '@') {
       return $this->setAttribute(substr($offset, 1), $value);
     } else {
-      return $this->getFirst($offset)->nodeValue = htmlentities($value, ENT_COMPAT|ENT_XML1, 'UTF-8', false);;
+      return $this->getFirst($offset)->setNodeValue($value);
     }
+  }
+  
+  public function setNodeValue($string)
+  {
+    $this->nodeValue = htmlentities($string, ENT_COMPAT|ENT_XML1, 'UTF-8', false);
   }
   
   public function offsetUnset($offset)
