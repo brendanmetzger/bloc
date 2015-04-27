@@ -41,19 +41,4 @@ class Dictionary extends \ArrayIterator
     $data = parent::offsetGet($offset);
     return is_array($data) ? new Dictionary($data) : $data;
   }
-  
-  public function limit($index = 0, $limit = 100, array &$paginate = [])
-  {
-    $start = ($index * $limit);
-    if ($this->count() > $start ) {
-      $paginate['next'] = $index+1;
-    }
-    
-    if ($index > 0 && $this->count() > $limit) {
-      $paginate['previous'] = $index-1;
-    }
-    
-    return new \LimitIterator($this, $start, $limit);
-  }
-  
 }

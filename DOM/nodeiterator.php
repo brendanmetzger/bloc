@@ -35,13 +35,13 @@ namespace bloc\DOM;
     
     public function rewind()
     {
-      $this->position = $this->direction > 0 ? 0 : $this->nodelist->length - 1;
+      $this->position = $this->direction > 0 ? 0 : $this->count() - 1;
     }
     
     
     public function valid()
     {
-      return $this->direction > 0 ? $this->nodelist->length > $this->position : $this->position >= 0;
+      return ($this->direction > 0) ? ($this->count() > $this->position) : ($this->position >= 0);
     }
     
     public function key()
@@ -74,32 +74,22 @@ namespace bloc\DOM;
       $this->direction *= -1;
       return $this;
     }
-  
     
-    public function limit($index = 0, $limit = 100, array &$paginate = [])
+    public function count()
     {
-      $index = $index - 1;
-      $start = ($index * $limit);
-      $total = $this->nodelist->length;
-      $paginate['total'] = ceil($total/$limit) - 1;
-      
-      if ($paginate['total'] > $index) {
-        $paginate['next'] = $index + 1;
-      }
-    
-      if ($index > 1 && $total > $limit) {
-        $paginate['previous'] = $index - 1;
-      }
-      
-      $paginate['index'] = $index + 1;
-      $paginate['total'] = ceil($total/$limit);
-    
-      return new \LimitIterator($this, $start, $limit);
+      return $this->nodelist->length;
     }
     
     public function pick($offset = 0)
     {
       return $this->nodelist->item($offset);
+    }
+    
+    public function sort(callable $callback)
+    {
+      $dict = new \bloc\types\Dictionary(iterator_to_array($this, false));
+      $dict->uasort($callback);
+      return $dict;
     }
     
     public function __toString()

@@ -34,5 +34,26 @@ trait Map
       $match = htmlentities(\bloc\registry::getNamespace($match, $this), ENT_COMPAT|ENT_XML1, 'UTF-8', false);
     }
     return $matches;
-  } 
+  }
+  
+  public function limit($index = 0, $limit = 100, array &$paginate = [])
+  {
+    $index = $index - 1;
+    $start = ($index * $limit);
+    $total = $this->count();
+    $paginate['total'] = ceil($total/$limit) - 1;
+    
+    if ($paginate['total'] > $index) {
+      $paginate['next'] = $index + 1;
+    }
+  
+    if ($index > 1 && $total > $limit) {
+      $paginate['previous'] = $index - 1;
+    }
+    
+    $paginate['index'] = $index + 1;
+    $paginate['total'] = ceil($total/$limit);
+  
+    return new \LimitIterator($this, $start, $limit);
+  }
 }
