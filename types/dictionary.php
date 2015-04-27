@@ -15,7 +15,8 @@ class Dictionary extends \ArrayIterator
     if (is_array($data) || is_object($data)) {
       parent::__construct($data);
     } else {
-      print_r($data);
+      throw new \RuntimeException("Error Processing Request", 1);
+      
     }
 
   }

@@ -18,8 +18,12 @@ trait registry {
     
     foreach ($namespaces as $namespace) {
       if (!method_exists($cursor, 'offsetGet')) {
-        print_r($cursor);
-        return;
+        /*
+          TODO this should be an instance of something in the bloc namespace
+        */
+        if ($cursor instanceof \models\model) {
+          return $cursor->{$namespace};
+        }
       }
       $cursor = $cursor->offsetGet($namespace);
     }
