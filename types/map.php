@@ -44,11 +44,11 @@ trait Map
     $paginate['total'] = ceil($total/$limit) - 1;
     
     if ($paginate['total'] > $index) {
-      $paginate['next'] = $index + 1;
+      $paginate['next'] = $index + 2;
     }
   
     if ($index > 1 && $total > $limit) {
-      $paginate['previous'] = $index - 1;
+      $paginate['previous'] = $index;
     }
     
     $paginate['index'] = $index + 1;
