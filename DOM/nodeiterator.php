@@ -9,8 +9,9 @@ namespace bloc\DOM;
   {
     use \bloc\types\Map;
     
-    private $position = 0,
-            $nodelist = null;
+    private $position  = 0,
+            $direction = 1,
+            $nodelist  = null;
             
     public function __construct(\DOMNodelist $nodelist)
     {
@@ -29,17 +30,18 @@ namespace bloc\DOM;
     
     public function next()
     {
-      return $this->position += 1;
+      return $this->position += $this->direction;
     }
     
     public function rewind()
     {
-      $this->position = 0;
+      $this->position = $this->direction > 0 ? 0 : $this->nodelist->length - 1;
     }
+    
     
     public function valid()
     {
-      return $this->nodelist->length > $this->position;
+      return $this->direction > 0 ? $this->nodelist->length > $this->position : $this->position >= 0;
     }
     
     public function key()
@@ -66,24 +68,31 @@ namespace bloc\DOM;
     {
       return null;
     }
+    
+    public function reverse()
+    {
+      $this->direction *= -1;
+      return $this;
+    }
   
     
     public function limit($index = 0, $limit = 100, array &$paginate = [])
     {
+      $index = $index - 1;
       $start = ($index * $limit);
       $total = $this->nodelist->length;
       $paginate['total'] = ceil($total/$limit) - 1;
       
       if ($paginate['total'] > $index) {
-        $paginate['next'] = $index+1;
+        $paginate['next'] = $index + 1;
       }
     
       if ($index > 1 && $total > $limit) {
-        $paginate['previous'] = $index-1;
+        $paginate['previous'] = $index - 1;
       }
       
-      $paginate['index'] = $index;
-      $paginate['total'] = ceil($total/$limit) - 1;
+      $paginate['index'] = $index + 1;
+      $paginate['total'] = ceil($total/$limit);
     
       return new \LimitIterator($this, $start, $limit);
     }
