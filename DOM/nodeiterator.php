@@ -56,8 +56,7 @@ namespace bloc\DOM;
   
     public function offsetGet($offset)
     {
-      
-      return $this->count() > 0 ? $this->current()->offsetGet($offset) : null;
+      return $this->current()->offsetGet($offset);
     }
   
     public function offSetSet($offset, $value)

@@ -11,19 +11,13 @@ trait registry {
   protected $registry;
   
   /*
-    TODO Consider a recursive function here instead of a loop
+    TODO Consider a recursive function here instead of a loop to ensure ArrayAccess
   */
   public static function getNamespace($path, \ArrayAccess $cursor) {
     $namespaces  = preg_split('/\:+/i',trim($path));
-    
     foreach ($namespaces as $namespace) {
       if (!method_exists($cursor, 'offsetGet')) {
-        /*
-          TODO this should be an instance of something in the bloc namespace
-        */
-        if ($cursor instanceof \models\model) {
-          return $cursor->{$namespace};
-        }
+        throw new \Exception("Implement Array Access - cannot reach {$namespace}", 1);
       }
       $cursor = $cursor->offsetGet($namespace);
     }
