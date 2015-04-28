@@ -21,7 +21,7 @@ class Element extends \DOMElement implements \ArrayAccess
   public function getFirst($nodeName)
   {
     $result = $this->getElementsByTagName($nodeName);
-    return $result->length > 0 ? $result->item(0) : null;
+    return $result->length > 0 ? $result->item(0) : new self($nodeName, null);
   }
   
   

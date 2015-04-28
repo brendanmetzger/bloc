@@ -24,6 +24,12 @@ trait registry {
     return $cursor;
   }
   
+  static public function index()
+  {
+    static $index = 0;
+    return $index++;
+  }
+  
   public function __set($key, $value)
   {
     return $this->setProperty($key, $value);

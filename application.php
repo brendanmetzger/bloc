@@ -82,7 +82,7 @@ class Application
     try {
       return call_user_func($this->callbacks[$env], $this, $param);      
     } catch (\Exception $e) {
-      print_r($e);
+      echo $e->getMessage() . ': Line ' . $e->getLine() . ' of ' . $e->getFile();
     }
   }
 
