@@ -6,6 +6,12 @@ namespace bloc;
   */
   
   abstract class Model implements \ArrayAccess {
+    const NAME = null;
+    
+    public function name()
+    {
+      return static::NAME;
+    }
     
     public function offsetExists($offset)
     {
