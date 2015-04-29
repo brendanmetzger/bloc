@@ -33,17 +33,6 @@ trait Map
 
     foreach ($matches as $key => &$match) {
       $data = \bloc\registry::getNamespace($match, $this);
-      // if ($match == 'item:media:@src') {
-      //   $data2 = \bloc\registry::getNamespace('item:media', $this);
-      //   echo "<pre>";
-      //   if ($data2 == $data) {
-      //     die('end not reached');
-      //   }
-      //   print_r($data);
-      //   print_r($data2);
-      //   echo "</pre>";
-      // }
-      //
       $match = htmlentities($data, ENT_COMPAT|ENT_XML1, 'UTF-8', false);
     }
     return $matches;

@@ -43,10 +43,11 @@ class Router
   public function delegate($default_controller, $default_action)
   {
     $class_name     = $this->namespace . ($this->request->controller ?: $default_controller);
-    $controller     = new \ReflectionClass($class_name);
-    $request_method = $this->request->type;
     
     try {
+      $controller     = new \ReflectionClass($class_name);
+      $request_method = $this->request->type;
+      
       $action  = $this->rigAction($controller, $this->request->action ?: $default_action);
       $instance = $controller->newInstance($this->request);
       

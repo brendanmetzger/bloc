@@ -9,7 +9,7 @@ namespace bloc;
     
     public function offsetExists($offset)
     {
-      return true;
+      return property_exists($this, $offset);
     }
   
     public function offsetGet($offset)
@@ -19,7 +19,7 @@ namespace bloc;
   
     public function offSetSet($offset, $value)
     {
-      return null;
+      return $this->{$offset} = $value;
     }
   
     public function offsetUnset($offset)

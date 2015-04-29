@@ -24,6 +24,14 @@ class Renderer
       foreach ($view->xpath->query('/html/body//script') as $javascript) {
         $view->dom->documentElement->lastChild->appendChild($javascript);
       }
+      
+      // split all newlines and ¶ symbols in a <p> to a new <p> elem
+      foreach ($view->xpath->query('/html/body//p') as $para) {
+        foreach (preg_split("/(\s?\n\s*|¶)/", $para->nodeValue) as $p) {
+          $para->parentNode->insertBefore($view->dom->createElement('p', $p), $para);
+        }
+        $para->parentNode->removeChild($para);
+      }
     
   		$attrs = [
         'xmlns'      => 'http://www.w3.org/1999/xhtml',
