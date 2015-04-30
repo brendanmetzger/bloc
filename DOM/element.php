@@ -51,6 +51,7 @@ class Element extends \DOMElement implements \ArrayAccess
   public function setNodeValue($string)
   {
     $this->nodeValue = htmlentities($string, ENT_COMPAT|ENT_XML1, 'UTF-8', false);
+    return $this;
   }
   
   public function offsetUnset($offset)
