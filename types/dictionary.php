@@ -42,4 +42,9 @@ class Dictionary extends \ArrayIterator
     $data = parent::offsetGet($offset);
     return is_array($data) ? new Dictionary($data) : $data;
   }
+  
+  public function sort(callable $callback)
+  {
+    $this->uasort($callback);
+  }
 }

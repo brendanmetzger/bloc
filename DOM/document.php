@@ -59,6 +59,6 @@ class Document extends \DOMDocument
     
   public function pick($expression, $offset = 0)
   {
-    return $this->find($expression)->item($offset);
+    return $this->find($expression)->pick($offset);
   }
 }

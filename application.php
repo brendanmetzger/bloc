@@ -72,7 +72,7 @@ class Application
     return $this->log;
   }
 
-  public function prepare($env, $callback)
+  public function prepare($env, callable $callback)
   {
     $this->callbacks[$env] = $callback;
   }

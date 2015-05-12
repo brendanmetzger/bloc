@@ -58,20 +58,20 @@ class View
     self::$renderer[$when][] = $callback;
   }
   
-  public function getRenderers($key)
+  public function getRenderer($key)
   {
     return self::$renderer[$key];
   }
   
 	public function render($data = [])
 	{    
-    foreach ($this->getRenderers('before') as $callback) {
+    foreach ($this->getRenderer('before') as $callback) {
       call_user_func($callback, $this);
     }
     
     $this->parser->parse($data);
     
-    foreach ($this->getRenderers('after') as $callback) {
+    foreach ($this->getRenderer('after') as $callback) {
       call_user_func($callback, $this);
     }
     

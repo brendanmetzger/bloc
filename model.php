@@ -6,11 +6,9 @@ namespace bloc;
   */
   
   abstract class Model implements \ArrayAccess {
-    const NAME = null;
-    
-    public function name()
+    public function get_model()
     {
-      return static::NAME;
+      return strtolower(array_pop(explode(NS, get_called_class())));
     }
     
     public function offsetExists($offset)
