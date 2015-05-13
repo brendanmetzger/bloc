@@ -71,4 +71,9 @@ class Element extends \DOMElement implements \ArrayAccess
   {
     return $this->nodeValue;
   } 
+  
+  public function log()
+  {
+    return htmlentities($this->ownerDocument->saveXML($this));
+  }
 }

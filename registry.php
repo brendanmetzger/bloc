@@ -18,6 +18,7 @@ trait registry {
     foreach ($namespaces as $namespace) {
       if (!method_exists($cursor, 'offsetGet')) {
         throw new \Exception("Implement Array Access - cannot reach {$namespace}", 1);
+
       }
       $cursor = $cursor->offsetGet($namespace);
     }
