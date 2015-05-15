@@ -61,4 +61,9 @@ class Document extends \DOMDocument
   {
     return $this->find($expression)->pick($offset);
   }
+  
+  public function errors()
+  {
+    return libxml_get_errors();
+  }
 }
