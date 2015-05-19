@@ -13,10 +13,10 @@ class Document extends \DOMDocument
   
   private $xpath = null,
           $options = [
-            'encoding' => 'UTF-8',
+            'encoding'           => 'UTF-8',
             'preserveWhiteSpace' => false,
-            'validateOnParse' => false,
-            'formatOutput' => true,
+            'validateOnParse'    => false,
+            'formatOutput'       => true,
           ];
 
   
