@@ -88,7 +88,7 @@ class Application
 
   private function autoload($class)
   { 
-    @include str_replace(NS, DIRECTORY_SEPARATOR, $class) . '.php';
+    @include str_replace(NS, DIRECTORY_SEPARATOR, strtolower($class)) . '.php';
   }
   
   public function vendor($class)
