@@ -37,4 +37,5 @@ class Query
   {
     return $this->find($expression)->pick($offset);
   }
+  
 }

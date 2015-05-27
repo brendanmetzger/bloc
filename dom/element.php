@@ -18,10 +18,11 @@ class Element extends \DOMElement implements \ArrayAccess
     return $this;
   }
   
-  public function getFirst($nodeName)
+  public function getFirst($nodeName, $offset = 0)
   {
     $result = $this->getElementsByTagName($nodeName);
-    return $result->length > 0 ? $result->item(0) : $this->appendChild(new self($nodeName, null));
+      
+    return $result->length > $offset ? $result->item($offset) : $this->appendChild(new self($nodeName, null));
   }
   
   
@@ -59,6 +60,11 @@ class Element extends \DOMElement implements \ArrayAccess
     return null;
   }
   
+  public function getIndex()
+  {
+    return ((int)preg_replace('/.*([0-9+])/', '$1', substr($this->getNodePath(), strlen($this->parentNode->getNodePath())))) - 1;
+  }
+  
   public function replaceArrayValues(array $matches)
   {
     foreach ($matches as $key => &$match) {
@@ -70,10 +76,12 @@ class Element extends \DOMElement implements \ArrayAccess
   public function __toString()
   {
     return $this->nodeValue;
-  } 
+  }
   
-  public function log()
+  
+  public function write($logging = false)
   {
-    return htmlentities($this->ownerDocument->saveXML($this));
+    $output = $this->ownerDocument->saveXML($this);
+    return $logging ? htmlentities($output) : $output;
   }
 }

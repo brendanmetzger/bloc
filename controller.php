@@ -28,6 +28,11 @@ class Controller
     return sprintf('%d: %s', $code, $message);
   }
   
+  public function CLIerror($code, $message)
+  {
+    return sprintf('%d: %s', $code, $message);
+  }
+  
   public function GETlogin($redirect)
   {
     $this->error(501, 'Nothin Doin');

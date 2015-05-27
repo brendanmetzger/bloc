@@ -10,6 +10,7 @@ define('PATH', realpath('../') . DIRECTORY_SEPARATOR);
 require PATH . 'bloc/router.php';
 require PATH . 'bloc/registry.php';
 require PATH . 'bloc/request.php';
+require PATH . 'bloc/response.php';
 require PATH . 'bloc/controller.php';
 
 /**
