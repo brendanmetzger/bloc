@@ -28,10 +28,18 @@ class Controller
     return sprintf('%d: %s', $code, $message);
   }
   
+  public function POSTerror($value='')
+  {
+    Application::instance()->getExchange('response')->addHeader("HTTP/1.0 404 Not Found");
+    return sprintf('%d: %s', $code, $message);
+  }
+  
+  
   public function CLIerror($code, $message)
   {
     return sprintf('%d: %s', $code, $message);
   }
+  
   
   public function GETlogin($redirect)
   {
