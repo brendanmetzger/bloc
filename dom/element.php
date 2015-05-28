@@ -62,7 +62,7 @@ class Element extends \DOMElement implements \ArrayAccess
   
   public function getIndex()
   {
-    return ((int)preg_replace('/.*([0-9+])/', '$1', substr($this->getNodePath(), strlen($this->parentNode->getNodePath())))) - 1;
+    return ((int)preg_replace('/.*([0-9+])/', '$1', substr($this->getNodePath(), strlen($this->parentNode->getNodePath()))));
   }
   
   public function replaceArrayValues(array $matches)
