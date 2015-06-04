@@ -28,7 +28,10 @@ class Renderer
       // split all newlines and ¶ symbols in a <p> to a new <p> elem
       foreach ($view->xpath->query('/html/body//p') as $para) {
         foreach (preg_split("/(\s?\n\s*|¶)/", $para->nodeValue) as $p) {
-          $para->parentNode->insertBefore($view->dom->createElement('p')->setNodeValue($p), $para);
+          $new_p = $para->parentNode->insertBefore($view->dom->createElement('p')->setNodeValue($p), $para);
+          if ($para->hasAttribute('class')) {
+            $new_p->setAttribute('class', $para->getAttribute('class'));
+          }
         }
         $para->parentNode->removeChild($para);
       }

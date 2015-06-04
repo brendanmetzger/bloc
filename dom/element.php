@@ -22,7 +22,7 @@ class Element extends \DOMElement implements \ArrayAccess
   {
     $result = $this->getElementsByTagName($nodeName);
       
-    return $result->length > $offset ? $result->item($offset) : $this->appendChild(new self($nodeName, null));
+    return $offset >= 0 && $result->length > $offset ? $result->item($offset) : $this->appendChild(new self($nodeName, null));
   }
   
   
@@ -62,7 +62,8 @@ class Element extends \DOMElement implements \ArrayAccess
   
   public function getIndex()
   {
-    return ((int)preg_replace('/.*([0-9+])/', '$1', substr($this->getNodePath(), strlen($this->parentNode->getNodePath()))));
+    $index = (int)preg_replace('/[^0-9]*([0-9]+)/', '$1', substr($this->getNodePath(), strlen($this->parentNode->getNodePath()), -1));
+    return $index === 0 ? $index : $index - 1;
   }
   
   public function replaceArrayValues(array $matches)
