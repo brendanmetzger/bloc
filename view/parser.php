@@ -67,9 +67,9 @@ class Parser
   
   public function queryCommentNodes($command)
   {
-    $command = "starts-with(normalize-space(.), '{$command}')";
-    $expression = "./descendant::comment()[{$command} and not(./ancestor::*/preceding-sibling::comment()[{$command}])]";
-    
+    $basic = "starts-with(normalize-space(.), '{$command}')";
+    $remove_recursive_iterator = ($command == 'iterate') ? " and not(./ancestor::*/preceding-sibling::comment()[{$command}])" : '';
+    $expression = "./descendant::comment()[{$basic}{$remove_recursive_iterator}]";
     return $this->view->xpath->query($expression);
   }
   
