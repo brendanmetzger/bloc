@@ -16,10 +16,13 @@ class View
   public function __construct($document_element)
   {
     $this->dom = new DOM\Document;
-        
+
     if (is_string($document_element)) {
+      
+      
       $this->dom->load(PATH.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
     } else if ($document_element instanceof \DOMNode) {
+      
       $this->dom->appendChild($this->dom->importNode($document_element, true));
     }
         
@@ -77,6 +80,7 @@ class View
     foreach ($this->getRenderer('before') as $callback) {
       call_user_func($callback, $this);
     }
+    
     
     $this->parser->parse($data);
     

@@ -17,9 +17,10 @@ class Parser
   
   public function parse($data)
   {
+    \bloc\application::instance()->log($this->view->dom->documentElement->nodeName);
     // cycle through iterators first, looking for <!-- iterate property --> nodes
     foreach ($this->queryCommentNodes('iterate') as $node) {
-      $template = $node->parentNode->removeChild($node->nextSibling);
+      $template = $node->nextSibling;
       $property = trim(substr(trim($node->nodeValue), 7));
 
       try {
@@ -62,6 +63,7 @@ class Parser
       $imported_view = $this->view->dom->importNode($view->dom->documentElement, true);
       $placeholder->parentNode->insertBefore($imported_view, $placeholder);
     }
+    // $template->parentNode->removeChild($template);
     $placeholder->parentNode->removeChild($placeholder);
   }
   

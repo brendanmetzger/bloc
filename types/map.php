@@ -48,8 +48,7 @@ trait Map
     if ($paginate['total'] > $index) {
       $paginate['next'] = $index + 2;
     }
-  
-    if ($index > 1 && $total > $limit) {
+    if ($index > 0 && $total > $limit) {
       $paginate['previous'] = $index;
     }
     
