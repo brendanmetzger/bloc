@@ -17,7 +17,6 @@ class Parser
   
   public function parse($data)
   {
-    \bloc\application::instance()->log($this->view->dom->documentElement->nodeName);
     // cycle through iterators first, looking for <!-- iterate property --> nodes
     foreach ($this->queryCommentNodes('iterate') as $node) {
       $template = $node->nextSibling;
@@ -25,7 +24,10 @@ class Parser
 
       try {
         $match = \bloc\registry::getNamespace($property, $data);
-        $this->mapIterator($template, $node, $match);
+        $fragment = $this->mapIterator($template, $match);
+        // replaced does nothing other than hold a reference to the last created element, in case the DOM is trying to reach it for anything
+        $replaced = $template->parentNode->replaceChild($fragment, $template);
+
       } catch (\RuntimeException $e) {
         if ($e->getCode() < 100) {
           \bloc\application::instance()->log($e);
@@ -52,8 +54,10 @@ class Parser
     }
   }
   
-  private function mapIterator(\DOMNode $template, \DOMNode $placeholder, $data)
+  private function mapIterator(\DOMNode $template, $data)
   {
+    $fragment = $this->view->dom->createDocumentFragment();
+    
     foreach ($data as $datum) {
       if (! $datum instanceof \DOMNode) {
         $datum = new \bloc\types\dictionary($datum);  
@@ -61,10 +65,10 @@ class Parser
       $view = new \bloc\view($template);
       $view->render($datum);
       $imported_view = $this->view->dom->importNode($view->dom->documentElement, true);
-      $placeholder->parentNode->insertBefore($imported_view, $placeholder);
+      $fragment->appendChild($imported_view);
     }
-    // $template->parentNode->removeChild($template);
-    $placeholder->parentNode->removeChild($placeholder);
+    
+    return $fragment;
   }
   
   public function queryCommentNodes($command)

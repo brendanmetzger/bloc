@@ -7,19 +7,18 @@ namespace bloc;
 class View
 {
   public $dom, $xpath, $parser, $clone, $context = null;
+  private $slugs = null;
   
   private static $renderer = [
     'before'    => [],
     'after'     => [],
   ];
 	  
-  public function __construct($document_element)
+  public function __construct($document_element, $slugs = null)
   {
     $this->dom = new DOM\Document;
-
+    $this->slugs = $slugs;
     if (is_string($document_element)) {
-      
-      
       $this->dom->load(PATH.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
     } else if ($document_element instanceof \DOMNode) {
       
@@ -80,7 +79,6 @@ class View
     foreach ($this->getRenderer('before') as $callback) {
       call_user_func($callback, $this);
     }
-    
     
     $this->parser->parse($data);
     
