@@ -24,7 +24,7 @@ class Parser
 
       try {
         $match = \bloc\registry::getNamespace($property, $data);
-        $fragment = $this->mapIterator($template, $match);
+        $fragment = $this->mapIterator($template, $match, $property == 'item:thumbnails');
         // replaced does nothing other than hold a reference to the last created element, in case the DOM is trying to reach it for anything
         $replaced = $template->parentNode->replaceChild($fragment, $template);
 
@@ -54,18 +54,21 @@ class Parser
     }
   }
   
-  private function mapIterator(\DOMNode $template, $data)
+  private function mapIterator(\DOMNode $template, $data, $thumbs)
   {
     $fragment = $this->view->dom->createDocumentFragment();
     
     foreach ($data as $datum) {
-      if (! $datum instanceof \DOMNode) {
+      
+      if (! $datum instanceof \ArrayAccess) {
         $datum = new \bloc\types\dictionary($datum);  
       }
+    
       $view = new \bloc\view($template);
       $view->render($datum);
       $imported_view = $this->view->dom->importNode($view->dom->documentElement, true);
       $fragment->appendChild($imported_view);
+    
     }
     
     return $fragment;

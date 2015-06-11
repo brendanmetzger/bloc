@@ -30,7 +30,6 @@ trait Map
   
   public function replaceArrayValues(array $matches)
   {
-
     foreach ($matches as $key => &$match) {
       $data = \bloc\registry::getNamespace($match, $this);
       $match = htmlentities($data, ENT_COMPAT|ENT_XML1, 'UTF-8', false);

@@ -15,11 +15,12 @@ trait registry {
   */
   public static function getNamespace($path, \ArrayAccess $cursor) {
     $namespaces  = preg_split('/\:+/i',trim($path));
+    
     foreach ($namespaces as $namespace) {
       if (!method_exists($cursor, 'offsetGet')) {
-        throw new \Exception("Implement Array Access - cannot reach '{$namespace}'", 1);
-
+        throw new \RuntimeException("Cannot reach '{$namespace}'", 1);
       }
+      
       $cursor = $cursor->offsetGet($namespace);
     }
     return $cursor;

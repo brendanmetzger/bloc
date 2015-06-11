@@ -5,7 +5,9 @@ namespace bloc;
   * Model Abstraction
   */
   
-  abstract class Model implements \ArrayAccess {
+  abstract class Model implements \ArrayAccess, \IteratorAggregate {
+    protected $slug;
+    
     public function get_model()
     {
       return strtolower(array_pop(explode(NS, get_called_class())));
@@ -29,6 +31,10 @@ namespace bloc;
     public function offsetUnset($offset)
     {
       return null;
+    }
+    
+    public function getIterator() {
+      return new \ArrayIterator($this->slug);
     }
     
   }

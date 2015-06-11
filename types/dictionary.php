@@ -36,7 +36,7 @@ class Dictionary extends \ArrayIterator
   public function offsetGet($offset)
   {
     if (!$this->offsetExists($offset)) {
-      throw new \RunTimeException("{$offset} is unavailable.", 100); 
+      throw new \RunTimeException("{$offset} is unavailable.", 404); 
     }
     
     $data = parent::offsetGet($offset);
