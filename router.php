@@ -69,7 +69,7 @@ class Router
     } catch (\RunTimeException $e) {
       $error_controller = new \ReflectionClass($this->namespace . $default_controller);
       $instance = $error_controller->newInstance($this->request);
-      return $this->rigAction($error_controller, 'error')->invoke($instance, $e->getCode(), $e->getMessage());
+      return $this->rigAction($error_controller, 'error')->invoke($instance, $e->getMessage(), $e->getCode());
     }
   }
 }
