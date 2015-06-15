@@ -12,11 +12,6 @@ class Element extends \DOMElement implements \ArrayAccess
     return $this;
   }
   
-  public function grab(\DOMNode $child, $where = null)
-  {
-    $this->appendChild($this);
-    return $this;
-  }
   
   public function getFirst($nodeName, $offset = 0)
   {
@@ -84,6 +79,6 @@ class Element extends \DOMElement implements \ArrayAccess
   public function write($logging = false)
   {
     $output = $this->ownerDocument->saveXML($this);
-    return $logging ? htmlentities($output) : $output;
+    return $logging ? '<pre>'.htmlentities($output).'</pre>' : $output;
   }
 }
