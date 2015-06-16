@@ -31,7 +31,7 @@ class Controller
       501 => "501 Not Implemented", 
     ];
     Application::instance()->getExchange('response')->addHeader("HTTP/1.0 {$codes[$code]}");
-    return sprintf('%d: %s', $code, $message);
+    return $message;
   }
   
   public function POSTerror($value='')
