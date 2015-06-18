@@ -27,12 +27,14 @@ class Application
     if (session_status() !== PHP_SESSION_ACTIVE) {
       session_name($name);
       session_start();
+      $_SESSION['last-active'] = time();
     } else {
       session_regenerate_id();
     }
     foreach ($data as $key => $value) {
       $_SESSION[$key] = $value;
     }
+    
     return $_SESSION;
   }
   
