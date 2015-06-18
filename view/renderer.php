@@ -66,7 +66,9 @@ class Renderer
   
   public static function addPartials(\bloc\controller $controller) {
     return function ($view) use ($controller) {
+
       $partials = &$controller->getPartials();
+
       foreach ($partials as $property => $path) {
         $view->{$property} = $path;
         unset($partials->$property);

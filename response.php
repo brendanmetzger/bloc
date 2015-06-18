@@ -21,6 +21,7 @@ class Response
       'json' => 'Content-Type: application/javascript; charset=utf-8',
       'xml'  => 'Content-Type: text/xml; charset=utf-8',
       'svg'  => 'Content-Type: image/svg+xml; charset=utf-8',
+      'jpg'  => 'Content-Type: image/jpeg',
     ][$this->type]);
     
     $this->setBody($output);
