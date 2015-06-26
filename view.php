@@ -46,13 +46,9 @@ class View
     foreach ($this->parser->queryCommentNodes($command) as $stub) {
       $adjacency = trim(substr(trim($stub->nodeValue),strlen($command)));
 
-      /*
-        TODO this is because unpublished arguments need to be dealt with
-      */
       if (!$view->dom->documentElement) {
-        echo "<pre> STILL NEED TO DEAL WITH UNPUBLISHED MATERIAL \n\n";
-        print_r($view->dom->errors());
-        exit();
+        \bloc\application::instance()->log("No template for '{$key}'");
+        continue;
       }
       $element = $this->dom->importNode($view->dom->documentElement, true);
       if (empty($adjacency)) {
