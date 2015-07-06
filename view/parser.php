@@ -43,8 +43,16 @@ class Parser
         preg_match_all('/\$([\@a-z\_\:0-9]+)\b/i', $slug, $matches);
         // Dictionary has a match method that will swap out real data based on the namespace requested
         $replacements = $data->replaceArrayValues(array_combine($matches[0], $matches[1]));
+        // Empty the default value
+        $template->nodeValue = '';
         // using slug, swapout nodevalue with replacements from above
-        $template->nodeValue = str_replace(array_keys($replacements), $replacements, $slug);
+        $xml = str_replace(array_keys($replacements), $replacements, $slug);
+        if ($xml) {
+          $f = $this->view->dom->createDocumentFragment();
+          $f->appendXML($xml);
+          $template->appendChild($f);
+          
+        }
       } catch (\RuntimeException $e) {
         // If an exception is thrown, it means data is missing. Remove the node.
         $method = $template->nodeType == 2 ? 'removeAttribute' : 'removeChild';

@@ -16,10 +16,9 @@ class Element extends \DOMElement implements \ArrayAccess
   public function getFirst($nodeName, $offset = 0)
   {
     $result = $this->getElementsByTagName($nodeName);
-      
+
     return $offset >= 0 && $result->length > $offset ? $result->item($offset) : $this->appendChild(new self($nodeName, null));
-  }
-  
+  }  
   
   public function offsetExists($offset)
   {
