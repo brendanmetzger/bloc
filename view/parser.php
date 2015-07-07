@@ -46,11 +46,16 @@ class Parser
         // Empty the default value
         $template->nodeValue = '';
         // using slug, swapout nodevalue with replacements from above
-        $xml = str_replace(array_keys($replacements), $replacements, $slug);
-        if ($xml) {
-          $f = $this->view->dom->createDocumentFragment();
-          $f->appendXML($xml);
-          $template->appendChild($f);
+        $string_data = str_replace(array_keys($replacements), $replacements, $slug);
+        if ($string_data) {
+          $adopt = $this->view->dom->createDocumentFragment();
+          
+          
+          if (!$adopt->appendXML($string_data)) {
+            $adopt = $this->view->dom->createTextNode($string_data);
+          }
+          
+          $template->appendChild($adopt);
           
         }
       } catch (\RuntimeException $e) {

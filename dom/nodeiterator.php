@@ -51,12 +51,14 @@ namespace bloc\DOM;
     
     public function offsetExists($offset)
     {
-      return true;
+      return $this->current();
     }
   
     public function offsetGet($offset)
     {
-      return $this->current()->offsetGet($offset);
+      if ($this->offsetExists($offset)) {
+        return $this->current()->offsetGet($offset);
+      }
     }
   
     public function offSetSet($offset, $value)

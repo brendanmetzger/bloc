@@ -41,6 +41,8 @@ trait Map
     $index = $index - 1;
     $start = ($index * $limit);
     $total = $this->count();
+    
+
     $paginate['total'] = ceil($total/$limit) - 1;
     
     if ($paginate['total'] > $index) {

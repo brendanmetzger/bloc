@@ -17,6 +17,7 @@ class Document extends \DOMDocument
             'preserveWhiteSpace' => false,
             'validateOnParse'    => false,
             'formatOutput'       => true,
+            'resolveExternals'   => true,
           ];
 
   
