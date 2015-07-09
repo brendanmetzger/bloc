@@ -58,6 +58,9 @@ namespace bloc\DOM;
     {
       if ($this->offsetExists($offset)) {
         return $this->current()->offsetGet($offset);
+      } else {
+        throw new \RuntimeException("No offset", 1);
+        
       }
     }
   
