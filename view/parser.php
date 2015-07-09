@@ -47,17 +47,17 @@ class Parser
         $template->nodeValue = '';
         // using slug, swapout nodevalue with replacements from above
         $string_data = str_replace(array_keys($replacements), $replacements, $slug);
-        if ($string_data) {
-          $adopt = $this->view->dom->createDocumentFragment();
-          
-          
-          if (!$adopt->appendXML($string_data)) {
-            $adopt = $this->view->dom->createTextNode($string_data);
-          }
-          
-          $template->appendChild($adopt);
-          
+        
+        $adopt = $this->view->dom->createDocumentFragment();
+        
+        
+        if (!$adopt->appendXML($string_data)) {
+          $adopt = $this->view->dom->createTextNode($string_data);
         }
+        
+        $template->appendChild($adopt);
+        
+          
       } catch (\RuntimeException $e) {
         // If an exception is thrown, it means data is missing. Remove the node.
         $method = $template->nodeType == 2 ? 'removeAttribute' : 'removeChild';
