@@ -32,6 +32,7 @@ class Router
   # Returns a http://php.net/reflectionmethod
   private function rigAction(\ReflectionClass $control, $action)
   {    
+    $this->request->action = $action;
     $method = $this->request->type . $action;
     if ( $control->hasMethod($method) ) {
       return $control->getMethod($method);
@@ -42,34 +43,30 @@ class Router
   
   public function delegate($default_controller, $default_action)
   {
-    $class_name     = $this->namespace . ($this->request->controller ?: $default_controller);
+    $this->request->controller = ($this->request->controller ?: $default_controller);
     
     try {
-      $controller     = new \ReflectionClass($class_name);
-      $request_method = $this->request->type;
-      
-      $action  = $this->rigAction($controller, $this->request->action ?: $default_action);
-      $instance = $controller->newInstance($this->request);
+      $controller = new \ReflectionClass($this->namespace . $this->request->controller);
+      $action     = $this->rigAction($controller, $this->request->action ?: $default_action);
+      $instance   = $controller->newInstance($this->request);
       
       if ( $action->isProtected() ) {
         $action->setAccessible($instance->authenticated);        
       }
-
       $params = $this->request->params;
       
-      if ($request_method === "POST") {
+      if ($this->request->type === "POST") {
         array_unshift($params, $this->request);
       }
       
       return $action->invokeArgs($instance, $params);
       
     } catch (\ReflectionException $e) {
-
       return $this->rigAction($controller, 'login')->invoke($instance, $this->request->redirect);
     } catch (\RunTimeException $e) {
-      $error_controller = new \ReflectionClass($this->namespace . $default_controller);
-      $instance = $error_controller->newInstance($this->request);
-      return $this->rigAction($error_controller, 'error')->invoke($instance, $e->getMessage(), $e->getCode());
+      $controller = new \ReflectionClass($this->namespace . $default_controller);
+      $instance   =  $controller->newInstance($this->request);
+      return $this->rigAction($controller, 'error')->invoke($instance, $e->getMessage(), $e->getCode());
     }
   }
 }
