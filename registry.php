@@ -49,6 +49,7 @@ trait registry {
   
   public function &setProperty($key, $value)
   {
+    $key = preg_replace('/\W/', '', $key);
     $this->registry[$key] = $value;
     return $this->registry[$key];
   }
