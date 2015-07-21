@@ -34,7 +34,7 @@ class Controller
     return $message;
   }
   
-  public function POSTerror($value='')
+  public function POSTerror($message, $code = 404)
   {
     Application::instance()->getExchange('response')->addHeader("HTTP/1.0 404 Not Found");
     return sprintf('%d: %s', $code, $message);
