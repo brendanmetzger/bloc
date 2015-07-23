@@ -54,8 +54,8 @@ trait registry {
     return $this->registry[$key];
   }
   
-  public function getRegistry()
+  public function getRegistry($merge = [])
   {
-    return new \bloc\types\dictionary($this->registry);
+    return new \bloc\types\dictionary(array_merge($this->registry, $merge));
   }
 }

@@ -58,8 +58,8 @@ class Controller
     header("Location: /");
   }
   
-  public function __invoke()
+  public function __invoke($merge = [])
   {
-    return $this->getRegistry();
+    return $this->getRegistry($merge);
   }
 }
