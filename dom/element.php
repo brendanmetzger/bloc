@@ -76,6 +76,11 @@ class Element extends \DOMElement implements \ArrayAccess
     return $matches;
   }
   
+  public function find($expression)
+  {
+    return $this->ownerDocument->find($expression, $this);
+  }
+  
   public function __toString()
   {
     return $this->nodeValue;
