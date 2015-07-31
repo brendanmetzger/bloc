@@ -30,7 +30,7 @@ class Parser
 
       } catch (\RuntimeException $e) {
         if ($e->getCode() < 100) {
-          \bloc\application::instance()->log($e);
+          \bloc\application::instance()->log($e->getMessage());
         }
       }
     }
