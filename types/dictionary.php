@@ -14,11 +14,7 @@ class Dictionary extends \ArrayIterator
   {
     if (is_array($data) || is_object($data)) {
       parent::__construct($data);
-    } else {
-      throw new \InvalidArgumentException("Error Processing Request", 1);
-      
     }
-
   }
   
   public function __set($key, $value)

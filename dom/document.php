@@ -49,6 +49,11 @@ class Document extends \DOMDocument
       }
     }
   }
+	
+	static public function TAG($text)
+	{
+		return (new self(trim($text), [], self::TEXT))->documentElement;
+	}
   
   public function find($expression, $context = null)
   {

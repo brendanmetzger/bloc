@@ -73,7 +73,6 @@ class Parser
     
     if (!empty($data)) {
       foreach ($data as $datum) {
-      
         if (! $datum instanceof \ArrayAccess) {
           $datum = new \bloc\types\dictionary($datum);  
         }
