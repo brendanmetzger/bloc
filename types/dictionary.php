@@ -42,5 +42,7 @@ class Dictionary extends \ArrayIterator
   public function sort(callable $callback)
   {
     $this->uasort($callback);
+    return $this;
   }
+  
 }

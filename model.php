@@ -37,4 +37,9 @@ namespace bloc;
       return new \ArrayIterator($this->slug);
     }
     
+    public function __toString()
+    {
+      return '';
+    }
+    
   }
