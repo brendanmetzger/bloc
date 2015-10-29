@@ -33,7 +33,7 @@ class Query
     return new NodeIterator($this->xpath->query($this->expression, $context ?: $this->dom->documentElement));
   }
   
-  public function pick($expression, $offset = 0)
+  public function pick($expression = '', $offset = 0)
   {
     return $this->find($expression)->pick($offset);
   }

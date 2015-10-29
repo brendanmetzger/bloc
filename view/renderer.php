@@ -24,6 +24,11 @@ class Renderer
       foreach ($view->xpath->query('/html/body//script') as $javascript) {
         $view->dom->documentElement->lastChild->appendChild($javascript);
       }
+      
+      // remove expunged items from view
+      foreach ($view->xpath->query('/html/body//*[@data-updated="expunged"]') as $remove) {
+        $remove->parentNode->removeChild($remove);
+      }
     
   		$attrs = [
         'xmlns'      => 'http://www.w3.org/1999/xhtml',
