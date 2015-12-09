@@ -37,7 +37,7 @@ class Element extends \DOMElement implements \ArrayAccess
     if (substr($offset, 0,1) === '@') {
       return $this->getAttribute(substr($offset, 1));
     } else {
-      return new NodeIterator($this->getElementsByTagName($offset));
+      return new Iterator($this->getElementsByTagName($offset));
     }
   }
   

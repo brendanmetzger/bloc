@@ -60,7 +60,7 @@ class Document extends \DOMDocument
     if ($this->xpath === null) {
       $this->xpath = new \DOMXpath($this);
     }
-    return new NodeIterator($this->xpath->query($expression, $context ?: $this->documentElement));
+    return new Iterator($this->xpath->query($expression, $context ?: $this->documentElement));
   }
 
   public function pick($expression, $offset = 0)

@@ -3,8 +3,7 @@ namespace bloc\types;
 
 class String
 {
-  
-  public function rotate($string, $n = 13) {
+  static public function rotate($string, $n = 13) {
       $letters = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
       $n = (int)$n % 26;
       if (!$n) return $string;
@@ -13,5 +12,5 @@ class String
       $rep = substr($letters, $n * 2) . substr($letters, 0, $n * 2);
       return strtr($string, $letters, $rep);
   }
-  
+
 }

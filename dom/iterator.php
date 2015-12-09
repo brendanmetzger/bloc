@@ -5,7 +5,7 @@ namespace bloc\DOM;
   * Nodelist Iterator
   */
 
-  class NodeIterator implements \Iterator, \ArrayAccess
+  class Iterator implements \Iterator, \ArrayAccess
   {
     use \bloc\types\Map;
 
@@ -99,10 +99,6 @@ namespace bloc\DOM;
 
     public function __toString()
     {
-      $current = $this->current();
-      if (is_array($current)) {
-        return (string)array_shift($current);
-      }
-      return (string)$current;
+      return (string)$this->count();
     }
   }
