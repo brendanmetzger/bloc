@@ -18,6 +18,10 @@ class Parser
   public function parse($data)
   {
     $replaced = [];
+    // we need our registry method
+    if (! method_exists($data, 'replaceArrayValues')) {
+      $data = new \bloc\types\dictionary($data);
+    }
     // cycle through iterators first, looking for <!-- iterate property --> nodes
     foreach ($this->queryCommentNodes('iterate') as $node) {
       $template = $node->nextSibling;
@@ -47,6 +51,7 @@ class Parser
         $replacements = $data->replaceArrayValues(array_combine($matches[0], $matches[1]));
         // Empty the default value
         $template->nodeValue = '';
+
         // using slug, swapout nodevalue with replacements from above
         $string_data = str_replace(array_keys($replacements), $replacements, $slug);
 
@@ -76,10 +81,6 @@ class Parser
 
     if (!empty($data)) {
       foreach ($data as $datum) {
-        if (! $datum instanceof \ArrayAccess) {
-          $datum = new \bloc\types\dictionary($datum);
-        }
-
         $view = new \bloc\view($template);
         $view->render($datum);
         $imported_view = $this->view->dom->importNode($view->dom->documentElement, true);
