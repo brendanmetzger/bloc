@@ -26,8 +26,6 @@ namespace bloc;
         $this->context = $item ? $this->identify($item) : $this->initialize();
       }
 
-
-
       if (!empty($data)) {
         try {
           static::$fixture = array_replace_recursive(static::$fixture, $data);

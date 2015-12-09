@@ -99,6 +99,10 @@ namespace bloc\DOM;
 
     public function __toString()
     {
-      return $this->count();
+      $current = $this->current();
+      if (is_array($current)) {
+        return (string)array_shift($current);
+      }
+      return (string)$current;
     }
   }
