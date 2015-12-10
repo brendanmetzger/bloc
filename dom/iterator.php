@@ -97,8 +97,20 @@ namespace bloc\DOM;
       return $dict;
     }
 
+   /**
+    * toString
+    *
+    * A User may not expect to have an iterator, calling toString on what they
+    * expect to be a node, so return the current node, typecasted
+    *
+    * @return String
+    **/
     public function __toString()
     {
-      return (string)$this->count();
+      $current = $this->current();
+      if (is_array($current)) {
+        return (string)array_shift($current);
+      }
+      return (string)$current;
     }
   }
