@@ -25,10 +25,10 @@ class Parser
     // cycle through iterators first, looking for <!-- iterate property --> nodes
     foreach ($this->queryCommentNodes('iterate') as $node) {
       $template = $node->nextSibling;
-      $property = trim(substr(trim($node->nodeValue), 7));
+      $node->nodeValue = trim(substr(trim($node->nodeValue), 7));
 
       try {
-        $match = \bloc\registry::getNamespace($property, $data);
+        $match = \bloc\registry::getNamespace($node->nodeValue, $data);
         $fragment = $this->mapIterator($template, $match);
         // replaced does nothing other than hold a reference to the last created element, in case the DOM is trying to reach it for anything
         $replaced[] = $template->parentNode->replaceChild($fragment, $template);
