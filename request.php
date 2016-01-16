@@ -12,7 +12,7 @@ class Request
   public $type, $redirect, $format;
 
   static public $HTTP = true;
-
+  static public $data;
   public function __construct($data, $parse = true)
   {
     $this->type     = self::$HTTP ? $_SERVER['REQUEST_METHOD'] : 'CLI';
@@ -22,6 +22,8 @@ class Request
     if ($parse) {
       $data['params'] = array_filter(explode('/', $data['params']));
     }
+
+    self::$data = $data;
     $this->registry = $data;
   }
 

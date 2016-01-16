@@ -9,7 +9,6 @@ namespace bloc;
 abstract class Controller
 {
   use \bloc\registry;
-
   protected $partials = [];
 
   abstract public function authenticate();
