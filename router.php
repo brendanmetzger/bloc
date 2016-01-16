@@ -51,7 +51,7 @@ class Router
       $instance   = $controller->newInstance($this->request);
 
       if ( $action->isProtected() ) {
-        $action->setAccessible($instance->authenticated);
+        $action->setAccessible($instance->authenticate());
       }
       $params = $this->request->params;
 
@@ -66,7 +66,7 @@ class Router
     } catch (\RunTimeException $e) {
       $controller = new \ReflectionClass($this->namespace . $default_controller);
       $instance   =  $controller->newInstance($this->request);
-      return $this->rigAction($controller, 'error')->invoke($instance, $e->getMessage(), $e->getCode());
+      return $this->rigAction($controller, 'GETerror')->invoke($instance, $e->getMessage(), $e->getCode());
     }
   }
 }

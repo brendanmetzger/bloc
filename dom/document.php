@@ -12,6 +12,7 @@ class Document extends \DOMDocument
   const TEXT = 2;
 
   private $xpath = null,
+          $filepath = null,
           $options = [
             'encoding'           => 'UTF-8',
             'preserveWhiteSpace' => false,
@@ -38,7 +39,8 @@ class Document extends \DOMDocument
           $this->appendChild($this->importNode($data, true));
           break;
         case self::FILE:
-          $this->load(PATH."{$data}.xml" , LIBXML_NOENT|LIBXML_COMPACT);
+          $this->filepath = PATH."{$data}.xml";
+          $this->load($this->filepath , LIBXML_NOENT|LIBXML_COMPACT);
           break;
         case self::TEXT:
           $this->loadXML($data);
@@ -48,6 +50,11 @@ class Document extends \DOMDocument
           break;
       }
     }
+  }
+
+  public function save($path = null)
+  {
+    return parent::save($path ?: $this->filepath);
   }
 
 	static public function TAG($text)
