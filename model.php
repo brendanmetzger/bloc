@@ -14,7 +14,6 @@ namespace bloc;
 
     abstract protected function identify($identity);
     abstract protected function initialize();
-
     abstract public function save();
 
     public function __construct($item = null, $data = [])
@@ -124,7 +123,7 @@ namespace bloc;
       }
     }
 
-    static public function name() {
+    static public function type() {
       return strtolower(substr(get_called_class(), 7));
     }
 

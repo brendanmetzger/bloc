@@ -14,14 +14,12 @@ class Router
   public $request;
   private $namespace;
 
-
   static public function redirect($location_url, $code = 302)
   {
     $location = "Location: {$location_url}";
     header($location, false, $code);
     exit();
   }
-
 
   public function __construct($namespace, \bloc\request $request = null)
   {
@@ -44,29 +42,31 @@ class Router
   public function delegate($default_controller, $default_action)
   {
     $this->request->controller = ($this->request->controller ?: $default_controller);
-
     try {
       $controller = new \ReflectionClass($this->namespace . $this->request->controller);
       $action     = $this->rigAction($controller, $this->request->action ?: $default_action);
       $instance   = $controller->newInstance($this->request);
-
-      if ( $action->isProtected() ) {
-        $action->setAccessible($instance->authenticate());
-      }
       $params = $this->request->params;
-
       if ($this->request->type === "POST") {
         array_unshift($params, $this->request);
       }
-
+      if ( $action->isProtected() && $user = $instance->authenticate() ) {
+        $action->setAccessible($user instanceof \bloc\types\authentication);
+        $args = $action->getParameters();
+        array_unshift($params, $user);
+      }
       return $action->invokeArgs($instance, $params);
-
     } catch (\ReflectionException $e) {
-      return $this->rigAction($controller, 'login')->invoke($instance, $this->request->redirect);
+      array_unshift($params, $this->request->redirect);
+      return $this->rigAction($controller, 'login')->invokeArgs($instance, $params);
     } catch (\RunTimeException $e) {
       $controller = new \ReflectionClass($this->namespace . $default_controller);
       $instance   =  $controller->newInstance($this->request);
-      return $this->rigAction($controller, 'GETerror')->invoke($instance, $e->getMessage(), $e->getCode());
+      return $this->rigAction($controller, 'error')->invoke($instance, $e->getMessage(), $e->getCode());
+    } catch (Types\Error $e) {
+      $controller = new \ReflectionClass($this->namespace . $default_controller);
+      $instance   =  $controller->newInstance($this->request);
+      return $this->rigAction($controller, 'error')->invoke($instance, $e->getMessage(), 500);
     }
   }
 }

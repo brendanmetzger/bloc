@@ -7,11 +7,37 @@ define('NS', '\\');
 # the ONLY path constant, thus, aptly named.
 define('PATH', realpath('../') . DIRECTORY_SEPARATOR);
 
+require PATH . 'bloc/types/error.php';
 require PATH . 'bloc/router.php';
 require PATH . 'bloc/registry.php';
 require PATH . 'bloc/request.php';
 require PATH . 'bloc/response.php';
 require PATH . 'bloc/controller.php';
+
+/**
+ * Maybe
+ * Functor that sets a value of an associative array via
+ * callback function if that value does not exist. If it does, value returned.
+ */
+class Maybe
+{
+  private $memo, $key = false;
+  public function __construct(array $memo, $key = null)
+  {
+    $this->memo = $key ? $memo[$key] : $memo;
+  }
+
+  public function __invoke($key)
+  {
+    $this->key = $key;
+    return array_key_exists($key, $this->memo) ? new self($this->memo, $key) : $this;
+  }
+
+  public function get(callable $callback)
+  {
+    return $this->key ? $this->memo[$this->key] = $callback($this->key) : $this->memo;
+  }
+}
 
 /**
  * bloc
@@ -35,7 +61,7 @@ class Application
       $_SESSION[$key] = $value;
     }
 
-    return $_SESSION;
+    return new Maybe($_SESSION);
   }
 
   static public function instance($config = [])

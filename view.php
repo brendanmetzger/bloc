@@ -6,20 +6,18 @@ namespace bloc;
  */
 class View
 {
-  public $dom, $xpath, $parser, $clone, $context = null;
-  private $slugs = null;
+  public $dom, $xpath, $parser, $clone;
 
   private static $renderer = [
     'before'    => [],
     'after'     => [],
   ];
 
-  public function __construct($document_element, $slugs = null)
+  public function __construct($document_element, $path = PATH)
   {
     $this->dom = new DOM\Document;
-    $this->slugs = $slugs;
     if (is_string($document_element)) {
-      $this->dom->load(PATH.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
+      $this->dom->load($path.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
     } else if ($document_element instanceof \DOMNode) {
 
       $this->dom->appendChild($this->dom->importNode($document_element, true));
@@ -82,12 +80,11 @@ class View
       call_user_func($callback, $this);
     }
 
-
     return $this;
 	}
 
   public function __toString()
   {
-    return $this->dom->saveXML($this->context);
+    return $this->dom->saveXML();
   }
 }

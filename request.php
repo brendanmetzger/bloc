@@ -20,7 +20,7 @@ class Request
     $this->format   = $data['content-type'] ?: 'html';
 
     if ($parse) {
-      $data['params'] = array_filter(explode('/', $data['params']));
+      $data['params'] = array_filter(explode('/', $data['params']), 'strlen');
     }
 
     self::$data = $data;

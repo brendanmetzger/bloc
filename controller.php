@@ -9,24 +9,14 @@ namespace bloc;
 abstract class Controller
 {
   use \bloc\registry;
-  protected $partials = [];
 
   abstract public function authenticate();
-
-  public function setPartial($key, $value)
-  {
-    $this->partials[$key] = $value;
-  }
-
-  public function getPartials()
-  {
-    return $this->partials;
-  }
 
   public function GETerror($message, $code = 404)
   {
     $codes = [
       400 => "400 Bad Request",
+      401 => "401 Unauthorized",
       404 => "404 Not Found",
       500 => "500 Internal Server Error",
       501 => "501 Not Implemented",
@@ -41,12 +31,10 @@ abstract class Controller
     return sprintf('%d: %s', $code, $message);
   }
 
-
   public function CLIerror($message, $code)
   {
     return sprintf('%d: %s', $code, $message);
   }
-
 
   public function GETlogin($redirect)
   {

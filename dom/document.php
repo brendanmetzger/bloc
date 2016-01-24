@@ -21,7 +21,6 @@ class Document extends \DOMDocument
             'resolveExternals'   => true,
           ];
 
-
   function __construct($data = false, $options = [], $flag = 1)
   {
     libxml_use_internal_errors(true);
@@ -57,7 +56,7 @@ class Document extends \DOMDocument
     return parent::save($path ?: $this->filepath);
   }
 
-	static public function TAG($text)
+	static public function NODE($text)
 	{
 		return (new self(trim($text), [], self::TEXT))->documentElement;
 	}

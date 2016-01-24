@@ -12,5 +12,4 @@ class String
       $rep = substr($letters, $n * 2) . substr($letters, 0, $n * 2);
       return strtr($string, $letters, $rep);
   }
-
 }
