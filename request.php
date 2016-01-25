@@ -15,8 +15,8 @@ class Request
   static public $data;
   public function __construct($data, $parse = true)
   {
-    $this->type     = self::$HTTP ? $_SERVER['REQUEST_METHOD'] : 'CLI';
-    $this->redirect = self::$HTTP ? $_SERVER['REDIRECT_URL'] : false;
+    $this->type     = self::$HTTP ? @$_SERVER['REQUEST_METHOD'] : 'CLI';
+    $this->redirect = self::$HTTP ? @$_SERVER['REDIRECT_URL'] : false;
     $this->format   = $data['content-type'] ?: 'html';
 
     if ($parse) {
