@@ -45,10 +45,16 @@ class Parser
       try {
         // this is the string to be operated on "something with $variable in it", trimmed of '[]';
         $slug = substr($template->nodeValue, 1,-1);
+
+        // $slug = substr($template->nodeValue, 1,-1);
         // matche alpha numeric strings prefixed with $ - : is namespace operator in this case
-        preg_match_all('/\$([\@a-z\_\:0-9]+)\b/i', $slug, $matches);
+        preg_match_all('/(?<!\$)\$([\@a-z\_\:0-9]+)\b/i', $template->nodeValue, $matches);
+
         // Dictionary has a match method that will swap out real data based on the namespace requested
         $replacements = $data->replaceArrayValues(array_combine($matches[0], $matches[1]));
+        // for replacemnts belonging to parent scope
+        $replacements['$$'] = '$';
+
         // Empty the default value
         $template->nodeValue = '';
 
