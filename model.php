@@ -25,6 +25,7 @@ namespace bloc;
         $this->context = $item ? $this->identify($item) : $this->initialize();
       }
 
+
       if (!empty($data)) {
         try {
           static::$fixture = array_replace_recursive(static::$fixture, $data);
@@ -32,6 +33,8 @@ namespace bloc;
         } catch (\UnexpectedValueException $e) {
           $this->errors[] = $e->getMessage();
         }
+      } else if (!$this->context->hasAttributes() && !$this->context->hasChildNodes()){
+        $this->input(static::$fixture, $this->context);
       }
     }
 

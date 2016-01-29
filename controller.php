@@ -14,6 +14,7 @@ abstract class Controller
 
   public function GETerror($message, $code = 404)
   {
+    if ($code < 400) $code = 400;
     $codes = [
       400 => "400 Bad Request",
       401 => "401 Unauthorized",

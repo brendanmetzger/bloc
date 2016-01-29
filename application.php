@@ -108,11 +108,7 @@ class Application
 
   public function execute($env, $param = null)
   {
-    try {
-      return call_user_func($this->callbacks[$env], $this, $param);
-    } catch (\Exception $e) {
-      echo $e->getMessage() . ': Line ' . $e->getLine() . ' of ' . $e->getFile();
-    }
+    return call_user_func($this->callbacks[$env], $this, $param);
   }
 
   private function autoload($class)

@@ -22,7 +22,7 @@ namespace bloc\DOM;
     {
       $item = $this->nodelist->item($this->position);
       if ($this->callback) {
-        return call_user_func($this->callback, $item);
+        return call_user_func($this->callback, $item, $this->position);
       }
 
       return $item;
