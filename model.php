@@ -21,10 +21,9 @@ namespace bloc;
 
       if ($item instanceof \DOMElement) {
         $this->context = $item;
-      } else {
-        $this->context = $item ? $this->identify($item) : $this->initialize();
+      } else if (!$this->context = $this->identify($item)) {
+        $this->context = $this->initialize();
       }
-
 
       if (!empty($data)) {
         try {
@@ -33,7 +32,7 @@ namespace bloc;
         } catch (\UnexpectedValueException $e) {
           $this->errors[] = $e->getMessage();
         }
-      } else if (!$this->context->hasAttributes() && !$this->context->hasChildNodes()){
+      } else if ($this->context && !$this->context->hasAttributes() && !$this->context->hasChildNodes()){
         $this->input(static::$fixture, $this->context);
       }
     }
