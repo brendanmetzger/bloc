@@ -61,6 +61,7 @@ class Renderer
     return function($view) use (&$find) {
       foreach ($view->parser->queryCommentNodes('preview') as $stub) {
         $path = trim(substr(trim($stub->nodeValue), 8));
+        // this will parse a document based on text
         $expression = '/([\/a-z0-9\-\_]+\.[a-z]{2,4})\s([0-9]+)\.\.([0-9]+)/i';
         preg_match($expression, $path, $r);
         $file = $find(PATH.$r[1])->get('file');
@@ -72,6 +73,28 @@ class Renderer
           $text .= substr($line, $whitespace);
         }
         $stub->parentNode->replaceChild($view->dom->createTextNode($text), $stub);
+      }
+    };
+  }
+
+  static public function REVIEW()
+  {
+    $find = new \bloc\Maybe([]);
+    return function($view) use (&$find) {
+      foreach ($view->parser->queryCommentNodes('review') as $stub) {
+        $path = trim(substr(trim($stub->nodeValue), 7));
+        // this will parse a document based on text
+
+        $expression = '/([\/a-z0-9\-\_]+\.[a-z]{2,4})\s([a-z0-9\s]+)/i';
+        preg_match($expression, $path, $r);
+        $file = $find(PATH.$r[1])->get(function ($filename) {
+          $text = file_get_contents($filename);
+          $keywords = '/\/\*\s*([a-z0-9\s]+)\b\s*\*\/\n(.*)\n\/\*\s*end\s*\1\s*\*\//is';
+          preg_match_all($keywords, $text, $r);
+          return array_combine($r[1], $r[2]);
+        });
+        $key = trim($r[2]);
+        $stub->parentNode->replaceChild($view->dom->createTextNode($file[$key]), $stub);
       }
     };
   }
