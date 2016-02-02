@@ -57,7 +57,6 @@ class Router
       }
       return $action->invokeArgs($instance, $params);
     } catch (\ReflectionException $e) {
-      array_unshift($params, $this->request->redirect);
       return $this->rigAction($controller, 'login')->invokeArgs($instance, $params);
     } catch (\RunTimeException $e) {
       $controller = new \ReflectionClass($this->namespace . $default_controller);
