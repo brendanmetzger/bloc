@@ -56,9 +56,9 @@ class Document extends \DOMDocument
     return parent::save($path ?: $this->filepath);
   }
 
-	static public function NODE($text)
+	static public function ELEM($text)
 	{
-		return (new self(trim($text), [], self::TEXT))->documentElement;
+    return (new self(trim($text), [], self::TEXT))->documentElement;
 	}
 
   public function find($expression, $context = null)

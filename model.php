@@ -158,6 +158,11 @@ namespace bloc;
       return new \ArrayIterator(static::$fixture);
     }
 
+    protected function beforeSave()
+    {
+      // TODO: look into fixture for updated/created attributes
+    }
+
     public function __toString()
     {
       return (string)$this->context;
