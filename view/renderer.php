@@ -32,11 +32,8 @@ class Renderer
 
   		$attrs = [
         'xmlns'      => 'http://www.w3.org/1999/xhtml',
-        'xmlns:foaf' => 'http://xmlns.com/foaf/0.1/',
-        'xmlns:dc'   => 'http://purl.org/dc/elements/1.1/',
-        'xmlns:svg'  => 'http://www.w3.org/2000/svg',
-        'version'    => 'XHTML+RDFa 1.0',
         'xml:lang'   => 'en',
+        'lang'       => 'en',
       ];
 
       // and some handy namespaces to the <html> elements
