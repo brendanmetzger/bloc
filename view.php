@@ -19,7 +19,6 @@ class View
     if (is_string($document_element)) {
       $this->dom->load($path.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
     } else if ($document_element instanceof \DOMNode) {
-
       $this->dom->appendChild($this->dom->importNode($document_element, true));
     }
 

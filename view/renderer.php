@@ -29,26 +29,6 @@ class Renderer
       foreach ($view->xpath->query('/html/body//*[@data-updated="expunged"]') as $remove) {
         $remove->parentNode->removeChild($remove);
       }
-
-  		$attrs = [
-        'xmlns'      => 'http://www.w3.org/1999/xhtml',
-        'xml:lang'   => 'en',
-        'lang'       => 'en',
-      ];
-
-      // and some handy namespaces to the <html> elements
-  		foreach ($attrs as $key => $value) {
-  			$view->dom->documentElement->setAttribute($key, $value);
-  		}
-
-      $ns = ['math' => 'http://www.w3.org/1998/Math/MathML',
-  			     'svg'  => 'http://www.w3.org/2000/svg'
-  			    ];
-
-      // Add namespaces to svg and math
-  		foreach ($view->xpath->query('//svg|//math') as $ns_elem) {
-  			$ns_elem->setAttribute('xmlns', $ns[$ns_elem->nodeName]);
-  		}
     };
   }
 
