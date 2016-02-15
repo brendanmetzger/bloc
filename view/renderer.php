@@ -16,7 +16,8 @@ class Renderer
     return function($view) {
       if (strtolower($view->dom->documentElement->nodeName) != 'html') return;
       // move style, meta, and link tags up to the head.
-      foreach ($view->xpath->query('/html/body//style|/html/body//meta|/html/body//link') as $head_node) {
+
+      foreach ($view->xpath->query('//style|//meta|//link') as $head_node) {
         $view->dom->documentElement->firstChild->appendChild($head_node);
       }
 
@@ -44,7 +45,7 @@ class Renderer
         $file = $find(PATH.$r[1])->get('file');
         $start  = $r[2]-1;
         $output = array_slice($file, $start, $r[3] - $start);
-        $text   = "\n";
+        $text   = "";
         $whitespace = strlen($output[0]) - strlen(preg_replace('/^\s*/', '', $output[0]));
         foreach ($output as $line) {
           $text .= substr($line, $whitespace);
