@@ -131,7 +131,7 @@ namespace bloc;
 
     public function get_model()
     {
-      return static::name();
+      return static::type();
     }
 
     public function offsetExists($offset)
