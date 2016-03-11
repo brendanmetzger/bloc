@@ -18,11 +18,11 @@ namespace bloc;
 
     public function __construct($item = null, $data = [])
     {
-
       if ($item instanceof \DOMElement) {
         $this->context = $item;
       } else if (!$this->context = $this->identify($item)) {
         $this->context = $this->initialize();
+        $this->afterCreate();
       }
 
       if (!empty($data)) {
@@ -156,6 +156,11 @@ namespace bloc;
 
     public function getIterator() {
       return new \ArrayIterator(static::$fixture);
+    }
+
+    protected function afterCreate()
+    {
+      // TODO: look into fixture for updated/created attributes
     }
 
     protected function beforeSave()
