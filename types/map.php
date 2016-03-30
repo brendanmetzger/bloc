@@ -22,7 +22,7 @@ trait Map
   {
     $object = parent::current();
     if ($this->callback) {
-      return call_user_func($this->callback, $object);
+      return call_user_func($this->callback, $object, parent::key());
     }
     return $object;
   }
