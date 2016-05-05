@@ -126,7 +126,7 @@ class Application
     if (! file_exists(PATH . str_replace(NS, DIRECTORY_SEPARATOR, $class) . '.php')) {
       $parts = explode(NS, $class);
       if ($parts[0] == 'controllers') {
-        throw new \RunTimeException("{$parts[1]} is not there.", 404);
+        throw new \RunTimeException("{$parts[1]} is not a thing on this site", 404);
       }
       throw new \LogicException("Could not load '{$class}' file.", 1);
     }
