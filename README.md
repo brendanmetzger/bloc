@@ -82,7 +82,7 @@ Create a file with something like this in it, index.php would be a good choice, 
     #4. Run the app. Nothing happens w/o this. Can call different stuff from the queue.
     $app->execute('http-request'); // (this returns 'done')
 
-
+```
 
 ## Templates
 
