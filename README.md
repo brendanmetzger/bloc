@@ -2,9 +2,9 @@
 
 ## License
 
-Copyright (C) Brendan A. Metzger - All Rights Reserved
-**Unauthorized copying of this file, and all files en this repository, via any medium is strictly prohibited**
-Proprietary and confidential
+Copyright (C) Brendan A. Metzger - All Rights Reserved  
+**Unauthorized copying of this file, and all files en this repository, via any medium is strictly prohibited**  
+Proprietary and confidential  
 Written by Brendan Metzger <brendan.metzger@gmail.com>, September 2011-Current
 
 This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
@@ -96,7 +96,7 @@ Create a file with something like this in it, index.php would be a good choice, 
 
 
 ### Syntax
-- templates are plain HTML (really XML)files, and there must always be a root node. ie. `<b/><c/>` = bad `<a><b/><c/></a>` = good
+- templates are plain HTML (actually XML) files, and there must always be a root node. ie. `<b/><c/>` = bad `<a><b/><c/></a>` = good
 - the entire body of a node that will be parsed and replaced with data must start with `[` and end with `]` and somewhere inside must contain an alphanumeric key preceded with an `$` symbol. Remember, an attribute is a node as well, so same rules apply.
 - if the key does not exist the entire node will be deleted - this is a good thing, as it allows you to avoid the most common bastardization of separating logic from the view, which is peppering your template with conditions to show/hide things based on your data.
 - if you don't want to delete a node because you *might* have data (input example below), make sure your data has that key, but make the value `null` or an empty string.
@@ -239,14 +239,14 @@ This is a nested for loop, so you'll need some hierarchical data, so let's prete
 
 #### Dictionaries
 
-To insure data can be mapped, filtered, and limited, the template requires that your data object has an `ArrayAccess` interface, and the best way to do that is **always** pass it wrapped within the `\bloc\types\dictionary` object. In fact, consider this required.
+To insure data can be mapped, filtered, and limited by the iterator, the template requires that your data object has an `ArrayAccess` interface, and the best way to do that is **always** pass it wrapped within the `\bloc\types\dictionary` object. In fact, consider this required.
 
 
 #### Nesting
 
 You can force the parser in to accessing a nested variable like so:
 
-`$data = ['sports' => ['favorite' => 'ping-pong']];`
+`$view->render(new \bloc\types\dictionary(['sports' => ['favorite' => 'ping-pong']]));`
 
 And get by passing it to a dictionary and the render method, it is available like so:
 
@@ -334,7 +334,7 @@ Using the 'Usage of a URL' example above, you would have a controller class name
 ```
 
 ### Authentication
-Controllers must have an authenticate method, which can be inherited from a parent or supplied in a trait, but it's made mandated by the interface. Using the accessor keyword `protected` will check against that authentication method which must return a user. The user is then passed as a first argument to the controller method. This varibale can be typechecked, and thus a very simple form or role-based authentication can be designed using traits, inheritance, and different classes for users, otherwise a typeerror exception is thrown and caught when the router does its delegation.
+Controllers must have an authenticate method, which can be inherited from a parent or supplied in a trait, but it is mandated by the interface. Using the accessor keyword `protected` will check against that authentication method which must return a user. The user is then passed as a first argument to the controller method. This varibale can be typechecked, and thus a very simple form or role-based authentication can be designed using traits, inheritance, and different classes for users, otherwise a typeerror exception is thrown and caught when the router does its delegation.
 
 ```PHP
 

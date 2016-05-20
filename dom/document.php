@@ -10,6 +10,7 @@ class Document extends \DOMDocument
   const NODE = 0;
   const FILE = 1;
   const TEXT = 2;
+  const PATH = 3;
 
   private $xpath = null,
           $filepath = null,
@@ -39,6 +40,10 @@ class Document extends \DOMDocument
           break;
         case self::FILE:
           $this->filepath = PATH."{$data}.xml";
+          $this->load($this->filepath , LIBXML_NOENT|LIBXML_COMPACT);
+          break;
+        case self::PATH:
+          $this->filepath = $data;
           $this->load($this->filepath , LIBXML_NOENT|LIBXML_COMPACT);
           break;
         case self::TEXT:
