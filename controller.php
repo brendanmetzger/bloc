@@ -42,7 +42,7 @@ abstract class Controller
     return $this->GETerror('Nothin Doin', 501);
   }
 
-  public function GETlogout()
+  protected function GETlogout($user)
   {
     session_destroy();
     header("Location: /");
