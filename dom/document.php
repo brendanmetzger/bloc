@@ -31,7 +31,7 @@ class Document extends \DOMDocument
       $this->{$prop} = $value;
     }
 
-    $this->registerNodeClass('\\DOMElement', '\\bloc\\DOM\\Element');
+    $this->registerNodeClass('\DOMElement', '\bloc\DOM\Element');
 
     if ($data) {
       switch ($flag) {
