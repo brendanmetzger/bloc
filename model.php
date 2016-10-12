@@ -22,7 +22,6 @@ namespace bloc;
         $this->context = $item;
       } else if (!$this->context = $this->identify($item)) {
         $this->context = $this->initialize();
-        $this->afterCreate();
       }
 
       if (!empty($data)) {
@@ -125,6 +124,11 @@ namespace bloc;
       }
     }
 
+    public function getCreated(\DOMElement $context)
+    {
+      return !empty($context['@created']) ? $context['@created'] : (new \DateTime())->format('Y-m-d H:i:s');
+    }
+
     static public function type() {
       return strtolower(substr(get_called_class(), 7));
     }
@@ -158,10 +162,6 @@ namespace bloc;
       return new \ArrayIterator(static::$fixture);
     }
 
-    protected function afterCreate()
-    {
-      // TODO: look into fixture for updated/created attributes
-    }
 
     protected function beforeSave()
     {
