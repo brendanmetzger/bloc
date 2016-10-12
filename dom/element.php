@@ -1,5 +1,5 @@
 <?php
-namespace bloc\DOM;
+namespace bloc\dom;
 
 /**
  * DOM Element Extension

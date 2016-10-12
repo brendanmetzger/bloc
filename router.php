@@ -35,7 +35,7 @@ class Router
     if ( $control->hasMethod($method) ) {
       return $control->getMethod($method);
     } else {
-      throw new \RuntimeException(sprintf("Unable to %s '%s'", strtolower($this->request->type), $action), 404);
+      throw new \RuntimeException(sprintf("%s doesn't happen", $action), 404);
     }
   }
 

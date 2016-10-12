@@ -39,20 +39,20 @@ trait Map
   {
     $index = $index - 1;
     $start = ($index * $limit);
-    $total = $this->count();
+    $paginate['total'] = $this->count();
 
 
-    $paginate['total'] = ceil($total/$limit) - 1;
+    $paginate['pages'] = ceil($paginate['total']/$limit) - 1;
 
-    if ($paginate['total'] > $index) {
+    if ($paginate['pages'] > $index) {
       $paginate['next'] = $index + 2;
     }
-    if ($index > 0 && $total > $limit) {
+    if ($index > 0 && $paginate['total'] > $limit) {
       $paginate['previous'] = $index;
     }
 
     $paginate['index'] = $index + 1;
-    $paginate['total'] = ceil($total/$limit);
+    $paginate['pages'] = ceil($paginate['total']/$limit);
 
     return new \LimitIterator($this, $start, $limit);
   }
