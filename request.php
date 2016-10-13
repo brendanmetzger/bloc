@@ -16,7 +16,7 @@ class Request
   public function __construct($data, $parse = true)
   {
     $this->type     = self::$HTTP ? @$_SERVER['REQUEST_METHOD'] : 'CLI';
-    $this->redirect = self::$HTTP ? @$_SERVER['HTTP_REFERER'] : false;
+    $this->redirect = self::$HTTP ? ($_SERVER['HTTP_REFERER'] ?? '/') : false;
     $this->format   = $data['content-type'] ?: 'html';
 
     if ($parse) {
