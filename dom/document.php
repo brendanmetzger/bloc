@@ -79,6 +79,12 @@ class Document extends \DOMDocument
     return $this->find($expression)->pick($offset);
   }
 
+  public function last($expression)
+  {
+    $found = $this->find($expression);
+    return $found->pick($found->count()-1);
+  }
+
   public function errors()
   {
     return libxml_get_errors();
