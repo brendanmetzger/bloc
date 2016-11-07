@@ -85,8 +85,10 @@ class Document extends \DOMDocument
     return $found->pick($found->count()-1);
   }
 
-  public function errors()
+  public function errors($out = false)
   {
-    return libxml_get_errors();
+    $errors = libxml_get_errors();
+    libxml_clear_errors();
+    return $out ? print_r($errors, true) : $errors;
   }
 }

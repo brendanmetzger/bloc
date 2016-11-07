@@ -17,7 +17,11 @@ class View
   {
     $this->dom = new DOM\Document;
     if (is_string($document_element)) {
-      $this->dom->load($path.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT);
+      if (! $this->dom->load($path.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT)) {
+
+        
+        $this->dom->loadXML("<pre>{$this->dom->errors(true)}</pre>");
+      }
     } else if ($document_element instanceof \DOMNode) {
       $this->dom->appendChild($this->dom->importNode($document_element, true));
     }
