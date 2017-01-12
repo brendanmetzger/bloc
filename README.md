@@ -1,5 +1,7 @@
 # *bloc*
 
+- [ ] Make it so you can get a numerical index from a Dictionary object in template view
+
 ## License
 
 Copyright (C) Brendan A. Metzger - All Rights Reserved  

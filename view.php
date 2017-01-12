@@ -7,7 +7,6 @@ namespace bloc;
 class View
 {
   public $dom, $xpath, $parser, $clone;
-
   private static $renderer = [
     'before'    => [],
     'after'     => [],
@@ -16,11 +15,12 @@ class View
   public function __construct($document_element, $path = PATH)
   {
     $this->dom = new DOM\Document;
+    
     if (is_string($document_element)) {
       if (! $this->dom->load($path.$document_element, LIBXML_COMPACT|LIBXML_NOBLANKS|LIBXML_NOXMLDECL|LIBXML_NOENT)) {
-
-        
-        $this->dom->loadXML("<pre>{$this->dom->errors(true)}</pre>");
+        $error = $this->dom->errors()[0];
+        $this->dom->loadXML("<div class='error'><a href='txmt://open?url=file://{$error->file}&amp;line={$error->line}&amp;column={$error->column}'>{$error->message}</a></div>");
+        return;
       }
     } else if ($document_element instanceof \DOMNode) {
       $this->dom->appendChild($this->dom->importNode($document_element, true));
@@ -32,17 +32,20 @@ class View
     foreach ($this->parser->queryCommentNodes('insert') as $stub) {
       $path = trim(substr(trim($stub->nodeValue), 6));
       $element = $this->dom->importNode((new view($path))->dom->documentElement, true);
+
+      if (getenv('MODE') === 'local') {
+        $element->setAttribute('data-path', PATH.$path);
+      }
+      
       $stub->parentNode->replaceChild($element, $stub);
     }
   }
 
 
-  public function __set($key, $view)
+  public function __set($key, $resource)
   {
     $command = "replace {$key}";
-    if (! $view instanceof view) {
-      $view = new view($view);
-    }
+    $view = (! $resource instanceof view) ? new view($resource) : $resource;
 
     foreach ($this->parser->queryCommentNodes($command) as $stub) {
       $adjacency = trim(substr(trim($stub->nodeValue),strlen($command)));
@@ -52,6 +55,9 @@ class View
         continue;
       }
       $element = $this->dom->importNode($view->dom->documentElement, true);
+      if (getenv('MODE') === 'local' && is_string($resource)) {
+        $element->setAttribute('data-path', PATH.$resource);
+      }
       if (empty($adjacency)) {
         $stub->parentNode->replaceChild($element, $stub);
       } else {

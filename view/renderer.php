@@ -38,11 +38,15 @@ class Renderer
     $find = new \bloc\Maybe([]);
     return function($view) use (&$find) {
       foreach ($view->parser->queryCommentNodes('preview') as $stub) {
+        
         $path = trim(substr(trim($stub->nodeValue), 8));
         // this will parse a document based on text
         $expression = '/([\/a-z0-9\-\_]+\.[a-z]{2,4})\s([0-9]+)\.\.([0-9]+)/i';
         preg_match($expression, $path, $r);
         $file = $find(PATH.$r[1])->get('file');
+        if (getenv('MODE') === 'local') {
+          $stub->parentNode->setAttribute('data-path', PATH.$r[1]);
+        }
         $start  = $r[2]-1;
         $output = array_slice($file, $start, $r[3] - $start);
         $text   = "";
@@ -50,6 +54,7 @@ class Renderer
         foreach ($output as $line) {
           $text .= substr($line, $whitespace);
         }
+        
         $stub->parentNode->replaceChild($view->dom->createTextNode($text), $stub);
       }
     };
@@ -73,6 +78,35 @@ class Renderer
         });
         $key = trim($r[2]);
         $stub->parentNode->replaceChild($view->dom->createTextNode($file[$key]), $stub);
+      }
+    };
+  }
+  
+  static public function EXAMPLES() {
+    $find = new \bloc\Maybe([]);
+    return function($view) use(&$find){
+      // find code chunks ```javascript 
+      foreach ($view->parser->queryCommentNodes('example') as $stub) {
+        $path = trim(substr(trim($stub->nodeValue), 7));
+        // this will parse a document based on text
+        $expression = '/([\/a-z0-9\-\_]+\.[a-z]{2,4})\s(html|css|javascript)/i';
+        preg_match($expression, $path, $r);
+        $file = $find(PATH.$r[1])->get(function ($filename) {
+          $text = file_get_contents($filename);
+          $keywords = '/```(html|css|javascript)(.*)\n```\n/iUs';
+          preg_match_all($keywords, $text, $r);
+          return array_combine($r[1], $r[2]);
+        });
+        $key = trim($r[2]);
+
+        if ($key == 'html') {
+          $node = $view->dom->createDocumentFragment();
+          $node->appendXML($file[$key]);
+        } else {
+          $node = $view->dom->createCDATASection($file[$key]);
+        }
+
+        $stub->parentNode->replaceChild($node, $stub);
       }
     };
   }
