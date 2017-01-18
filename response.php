@@ -22,7 +22,8 @@ class Response
       'xml'  => 'Content-Type: text/xml; charset=utf-8',
       'svg'  => 'Content-Type: image/svg+xml; charset=utf-8',
       'jpg'  => 'Content-Type: image/jpeg',
-      'js'   => 'Content-Type: application/javascript; charset=utf-8'
+      'js'   => 'Content-Type: application/javascript; charset=utf-8',
+      'css'  => 'Content-Type: text/css; charset=utf-8'
     ][$this->type]);
 
     $this->setBody($output);

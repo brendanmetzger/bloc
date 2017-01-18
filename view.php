@@ -7,6 +7,7 @@ namespace bloc;
 class View
 {
   public $dom, $xpath, $parser, $clone;
+  public static $edit = true;
   private static $renderer = [
     'before'    => [],
     'after'     => [],
@@ -27,13 +28,13 @@ class View
     }
 
     $this->xpath  = new \DomXpath($this->dom);
+    
     $this->parser = new view\parser($this);
-
     foreach ($this->parser->queryCommentNodes('insert') as $stub) {
       $path = trim(substr(trim($stub->nodeValue), 6));
       $element = $this->dom->importNode((new view($path))->dom->documentElement, true);
 
-      if (getenv('MODE') === 'local') {
+      if (getenv('MODE') === 'local' && self::$edit) {
         $element->setAttribute('data-path', PATH.$path);
       }
       
@@ -55,7 +56,7 @@ class View
         continue;
       }
       $element = $this->dom->importNode($view->dom->documentElement, true);
-      if (getenv('MODE') === 'local' && is_string($resource)) {
+      if (getenv('MODE') === 'local' && is_string($resource) && self::$edit) {
         $element->setAttribute('data-path', PATH.$resource);
       }
       if (empty($adjacency)) {
@@ -70,6 +71,12 @@ class View
   static public function addRenderer($when, callable $callback)
   {
     self::$renderer[$when][] = $callback;
+  }
+  
+  static public function removeRenderers()
+  {
+    self::$renderer['before'] = [];
+    self::$renderer['after'] = [];
   }
 
   public function getRenderer($key)
