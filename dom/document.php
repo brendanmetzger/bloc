@@ -58,7 +58,7 @@ class Document extends \DOMDocument
 
   public function save($path = null)
   {
-    return parent::save($path ?: $this->filepath);
+    return file_put_contents($path ?? $this->filepath, $this->saveXML(), LOCK_EX);
   }
 
 	static public function ELEM($text)
