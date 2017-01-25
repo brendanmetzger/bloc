@@ -9,6 +9,6 @@ class Token
 {
   static public function generate($key, $secret)
   {
-    return sha1($key . date('z') . $_SERVER['REMOTE_ADDR'] . $secret);
+    return sha1($key . date('m') . $_SERVER['REMOTE_ADDR'] . $secret);
   }
 }

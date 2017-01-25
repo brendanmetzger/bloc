@@ -46,7 +46,7 @@ class Router
       $controller = new \ReflectionClass($this->namespace . $this->request->controller);
       $action     = $this->rigAction($controller, $this->request->action ?: $default_action);
       $instance   = $controller->newInstance($this->request);
-      $params = $this->request->params;
+      $params     = $this->request->params;
       if ($this->request->type === "POST") {
         array_unshift($params, $this->request);
       }
