@@ -58,6 +58,10 @@ class Router
       return $action->invokeArgs($instance, $params);
     } catch (\ReflectionException $e) {
       return $this->rigAction($controller, 'login')->invokeArgs($instance, $params);
+    } catch (\InvalidArgumentException $e) {
+      $controller = new \ReflectionClass($this->namespace . $default_controller);
+      $instance   =  $controller->newInstance($this->request);
+      return $this->rigAction($controller, 'error')->invoke($instance, $e->getMessage(), $e->getCode());
     } catch (\RunTimeException $e) {
       $controller = new \ReflectionClass($this->namespace . $default_controller);
       $instance   =  $controller->newInstance($this->request);

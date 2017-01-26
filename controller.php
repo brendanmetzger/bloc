@@ -10,7 +10,7 @@ abstract class Controller
 {
   use \bloc\registry;
 
-  abstract public function authenticate();
+  abstract public function authenticate($user = null);
 
   public function GETerror($message, $code = 404)
   {
