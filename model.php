@@ -16,8 +16,14 @@ namespace bloc;
     abstract protected function initialize();
     abstract public function save();
 
-    public function __construct($item = null, $data = [])
+    public function __construct($item = null, $data = [], $dependencies = [])
     {
+      // before anything, make sure model tracks its dependencies
+      foreach ($dependencies as $dependency) {
+        $this->injectDependency($dependency);
+      }
+      
+      
       if ($item instanceof \DOMElement) {
         $this->context = $item;
       } else if (!$this->context = $this->identify($item)) {
@@ -31,9 +37,14 @@ namespace bloc;
         } catch (\UnexpectedValueException $e) {
           $this->errors[] = $e->getMessage();
         }
-      } else if ($this->context && !$this->context->hasAttributes() && !$this->context->hasChildNodes()){
+      } else if ($this->context && !$this->context->hasAttributes() && !$this->context->hasChildNodes()) {
         $this->input(static::$fixture, $this->context);
       }
+    }
+    
+    public function injectDependency(\bloc\Model $dependency)
+    {
+      $this->{$dependency->_model} = $dependency;
     }
 
     public function input($data, \DOMElement $context)
