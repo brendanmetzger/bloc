@@ -60,7 +60,7 @@ class Token
   
   public function save($value, $expiration)
   {
-    $secure = false;
+    $secure = true;
     setcookie('token', $value, $expiration, '/', '', $secure, true);
   }
   
