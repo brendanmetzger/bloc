@@ -21,6 +21,8 @@ abstract class Controller
       404 => "404 Not Found",
       500 => "500 Internal Server Error",
       501 => "501 Not Implemented",
+      409 => "409 Conflict",
+      412 => "412 Precondition Failed",
     ];
     Application::instance()->getExchange('response')->addHeader("HTTP/1.0 {$codes[$code]}");
     return $message;

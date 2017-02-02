@@ -43,7 +43,7 @@ trait registry {
 
   public function getProperty($key)
   {
-    return $this->registry[$key];
+    return $this->registry[$key] ?? false;
   }
 
   public function &setProperty($key, $value)
