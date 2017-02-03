@@ -60,7 +60,7 @@ class Token
   
   public function save($value, $expiration)
   {
-    $secure = true;
+    $secure = getenv('MODE') !== 'local';
     setcookie('token', $value, $expiration, '/', '', $secure, true);
   }
   
