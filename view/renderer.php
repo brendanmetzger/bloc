@@ -30,6 +30,10 @@ class Renderer
       foreach ($view->xpath->query('/html/body//*[@data-updated="expunged"]') as $remove) {
         $remove->parentNode->removeChild($remove);
       }
+      
+      foreach ($view->xpath->query('//svg') as $svg) {
+        $svg->setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+      }
     };
   }
 
