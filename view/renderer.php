@@ -76,7 +76,7 @@ class Renderer
         preg_match($expression, $path, $r);
         $file = $find(PATH.$r[1])->get(function ($filename) {
           $text = file_get_contents($filename);
-          $keywords = '/\/\*\s*([a-z0-9\s]+)\b\s*\*\/\n(.*)\n\/\*\s*end\s*\1\s*\*\//is';
+          $keywords = '/\/\*\s*([a-z0-9\s]+)\b\s*\*?\/?\n(.*)\n\/?\*?\s*end\s*\1\s*\*\//is';
           preg_match_all($keywords, $text, $r);
           return array_combine($r[1], $r[2]);
         });
