@@ -28,8 +28,9 @@ class Query
       $this->xpath = new \DOMXpath($this->dom);
     }
 
-    $this->path($expression);
-    return new Iterator($this->xpath->query($this->expression, $context ?: $this->dom->documentElement));
+    // $this->path($expression);
+
+    return new Iterator($this->xpath->query($this->expression . $expression, $context ?: $this->dom->documentElement));
   }
 
   public function pick($expression = '', $offset = 0)

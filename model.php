@@ -108,7 +108,6 @@ namespace bloc;
 
       $accessor = substr($method, 0, 3); // will be get or set
       $context  = $arguments[0];
-
       if ($accessor == 'get') {
         return $context[substr($method,3)];
       } else {
@@ -133,11 +132,6 @@ namespace bloc;
       foreach ($attributes as $property => $value) {
         $this->{"set{$property}Attribute"}($context, $value);
       }
-    }
-
-    public function getCreated(\DOMElement $context)
-    {
-      return !empty($context['@created']) ? $context['@created'] : (new \DateTime())->format('Y-m-d H:i:s');
     }
 
     static public function type() {

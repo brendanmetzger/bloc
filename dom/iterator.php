@@ -38,7 +38,6 @@ namespace bloc\dom;
       $this->position = $this->direction > 0 ? 0 : $this->count() - 1;
     }
 
-
     public function valid()
     {
       return ($this->direction > 0) ? ($this->count() > $this->position) : ($this->position >= 0);
@@ -60,7 +59,6 @@ namespace bloc\dom;
         return $this->current()->offsetGet($offset);
       } else {
         throw new \RuntimeException("No offset", 1);
-
       }
     }
 
