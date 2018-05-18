@@ -1,26 +1,20 @@
 # *bloc*
 
-- [ ] Make it so you can get a numerical index from a Dictionary object in template view
-
 ## License
 
-Copyright (C) Brendan A. Metzger - All Rights Reserved  
-**Unauthorized copying of this file, and all files en this repository, via any medium is strictly prohibited**  
-Proprietary and confidential  
-Written by Brendan Metzger <brendan.metzger@gmail.com>, September 2011-Current
+Copyright (C) Brendan A. Metzger - All Rights Reserved September 2011-2016
 
 This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/4.0/.
 
 
-
 ## motivation
-Part of my motivation in creating my own framework has been experiment in creating a simple but powerful tool that can truly avoid *all* dependencies while remaining a small and comprehensible system. In an effort to make code easy enough to read, I'm avoiding boilerplate docblocks and keeping inheritance and interfaces as modest as possible, helping avoid scavenger hunts through dozens of files to find out how or why some magical property exists. With a few moments of careful study things should make sense, and one can read this entire repository front to back in less than an hour.
+Part of my motivation in creating frameworks has been experiment in creating a simpler tools that attempt to avoid dependencies. This both helps with maintainence as well as keeping the system comprehensible as a whole. In an effort to make code easy enough to read, I'm avoiding boilerplate docblocks and keeping inheritance and interfaces as modest as possible, helping avoid scavenger hunts through dozens of files to find out how or why some magical property exists. With a few moments of careful study things should make sense, and one can read this entire repository front to back in less than an hour.
 
 ## Requirements
 
 ### For the computer
 
-- php 5.5
+- php 7
 
 ### For the human
 
