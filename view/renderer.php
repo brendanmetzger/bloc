@@ -16,8 +16,9 @@ class Renderer
     return function($view) {
       if (strtolower($view->dom->documentElement->nodeName) != 'html') return;
       // move style, meta, and link tags up to the head.
+      $view->xpath->registerNamespace("layout", "http://www.w3.org/1999/xhtml");
 
-      foreach ($view->xpath->query('//style|//meta|//link') as $head_node) {
+      foreach ($view->xpath->query('//layout:style|//style|//meta|//link') as $head_node) {
         $view->dom->documentElement->firstChild->appendChild($head_node);
       }
 
